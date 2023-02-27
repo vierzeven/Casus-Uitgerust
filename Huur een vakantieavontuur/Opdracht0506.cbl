@@ -176,9 +176,6 @@
        ToevoegenReservering.
            CALL "ToevoegenReservering".
 
-       ToevoegenReservering.
-           CALL "ToevoegenReservering".
-
        ToevoegenKlant.
            CALL "ToevoegenKlant".
            
