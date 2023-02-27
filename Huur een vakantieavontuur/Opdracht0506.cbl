@@ -1,7 +1,7 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. Opdracht0506.
        AUTHOR. Joey Schmitz.
-       DATE-WRITTEN. 08-02-2023 en 09-02-2023.
+       DATE-WRITTEN. 02-2023.
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
        SPECIAL-NAMES.
@@ -14,14 +14,6 @@
            ACCESS MODE IS DYNAMIC
            RECORD KEY IS FS-K-Klantnummer
            FILE STATUS IS IOStatus.
-
-      *    SELECT ReserveringenBestand
-      *    ASSIGN TO "C:\COBOL\DATA\HUUR\Reserveringen.dat"
-      *    ORGANIZATION IS INDEXED
-      *    ACCESS MODE IS DYNAMIC
-      *    RECORD KEY IS FS-R-Reserveringsnummer
-      *    FILE STATUS IS IOStatus.
-
        SELECT ReserveringenBestand
            ASSIGN TO "C:\COBOL\DATA\HUUR\ReserveringenMetAltKey.dat"
            ORGANIZATION IS INDEXED
@@ -30,7 +22,6 @@
            ALTERNATE KEY IS FS-R-Woningnummer
            WITH DUPLICATES
            FILE STATUS IS IOStatus.
-
        SELECT BewonersBestand
            ASSIGN TO "C:\COBOL\DATA\HUUR\Bewoners.dat"
            ORGANIZATION IS INDEXED
@@ -146,7 +137,6 @@
        PROCEDURE DIVISION.
        BeginProgram.
            PERFORM DisplayMenu
-           .
            STOP RUN
            .
        DisplayMenu.
@@ -241,6 +231,9 @@
            PERFORM VulReserveringen
            .
 
+       ToevoegenReservering.
+           CALL "ToevoegenReservering".
+
        ToevoegenKlant.
            DISPLAY SPACE
            OPEN I-O SysteemkengetallenBestand
@@ -278,64 +271,6 @@
            CLOSE SysteemkengetallenBestand
            CLOSE KlantenBestand
            .
-       ToevoegenReservering.
-           DISPLAY SPACE
-           OPEN I-O SysteemkengetallenBestand
-           IF NOT IO-OK
-               DISPLAY ">>> Fout bij het openen van SysteemkengetallenBestand.dat: " IOStatus
-           END-IF
-           OPEN I-O ReserveringenBestand
-           IF NOT IO-OK
-               DISPLAY ">>> Fout bij het openen van Reserveringen.dat: " IOStatus
-           END-IF
-           READ SysteemkengetallenBestand
-           ADD 1               TO HoogsteReserveringsnummer
-           MOVE HoogsteReserveringsnummer
-                               TO FS-R-Reserveringsnummer
-           DISPLAY "Klantnummer: " WITH NO ADVANCING
-           ACCEPT FS-R-Klantnummer
-           DISPLAY "Woningnummer: " WITH NO ADVANCING
-           ACCEPT FS-R-Woningnummer
-           DISPLAY "Jaar: " WITH NO ADVANCING
-           ACCEPT FS-R-Jaar
-           IF FS-R-Jaar = ZERO
-               MOVE DatumVandaag(1:4)
-                               TO FS-R-Jaar
-           END-IF
-           DISPLAY "Weeknummer: " WITH NO ADVANCING
-           ACCEPT FS-R-Weeknummer
-           DISPLAY "Aantal weken: " WITH NO ADVANCING
-           ACCEPT FS-R-AantalWeken
-           DISPLAY "Datum creatie: " WITH NO ADVANCING
-           ACCEPT FS-R-DatumCreatie
-           IF FS-R-DatumCreatie = SPACE
-               MOVE DatumVandaag
-                               TO FS-R-DatumCreatie
-           END-IF
-           DISPLAY "Aantal bewoners: " WITH NO ADVANCING
-           ACCEPT AantalBewoners
-           PERFORM VARYING Teller FROM 1 BY 1 UNTIL Teller > AantalBewoners
-               OPEN I-O BewonersBestand
-               MOVE FS-R-Reserveringsnummer
-                               TO FS-B-Reserveringsnummer
-               MOVE Teller     TO FS-B-Volgnummer
-               DISPLAY "Initialen gast " Teller ": " WITH NO ADVANCING
-               ACCEPT FS-B-Initialen
-               DISPLAY "Geboortedatum gast " Teller ": " WITH NO ADVANCING
-               ACCEPT FS-B-Geboortedatum
-               WRITE Bewonersrecord
-               CLOSE BewonersBestand
-           END-PERFORM
-           WRITE Reserveringsrecord
-           DISPLAY ">>> Writing Reservering. IOStatus: " IOStatus
-           REWRITE Systeemkengetallenrecord
-           DISPLAY ">>> Rewriting Systeemkengetallen. IOStatus: " IOStatus
-           CLOSE SysteemkengetallenBestand
-           DISPLAY ">>> Closing SysteemkengetallenBestand. IOStatus: " IOStatus
-           CLOSE ReserveringenBestand
-           DISPLAY ">>> Closing ReserveringenBestand. IOStatus: " IOStatus
-           .
-
        BezettingsOverzicht.
            PERFORM RB90-InitProgramma
            IF NOT R-EOF
