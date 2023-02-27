@@ -10,8 +10,10 @@
     <AutoGenerateBindingRedirects>False</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Bestandsinitialisatie.cbl" />
     <Compile Include="Opdracht0506.cbl" />
     <Compile Include="Program1.cbl" />
+    <Compile Include="ToevoegenKlant.cbl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Bewoner.cpy" />
