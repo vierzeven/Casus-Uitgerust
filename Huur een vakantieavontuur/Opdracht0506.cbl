@@ -1,4 +1,4 @@
-       IDENTIFICATION DIVISION.
+IDENTIFICATION DIVISION.
        PROGRAM-ID. Opdracht0506.
        AUTHOR. Joey Schmitz.
        DATE-WRITTEN. 02-2023.
@@ -17,10 +17,10 @@
          88 IO-OK VALUE ZERO.
        01 KeuzeVlag PIC 9 VALUE 1.
          88 VerlaatHetProgramma VALUE ZERO.
-         88 BlijfInHetMenu      VALUE 1.
+         88 BlijfInHetMenu VALUE 1.
        01 WijzigingVlag PIC 9 VALUE 0.
          88 WijzigingTeVerwerken VALUE 1.
-         88 GeenWijziging        VALUE 0.
+         88 GeenWijziging VALUE 0.
        01 ReserveringVerwerktVlag PIC 9 VALUE 0.
          88 ReserveringVerwerkt VALUE 1.
          88 GeenReserveringVerwerkt VALUE 0.
@@ -66,16 +66,15 @@
            05 Weken PIC X(4) VALUE "   ." OCCURS 20 TIMES.
        01 FILLER.
          03 Weekomzetten PIC 99999 VALUE ZERO OCCURS 20 TIMES.
-       
 
        *> Tellers
-       01 Teller       PIC 99 VALUE ZERO.
+       01 Teller PIC 99 VALUE ZERO.
        *>01 Huisjesteller PIC 99 VALUE ZERO.
-       01 Wekenteller  PIC 99 VALUE ZERO.
+       01 Wekenteller PIC 99 VALUE ZERO.
        *> HumanReadable variabelen
-       01 HRBedrag     PIC $ZZZ9 VALUE ZERO.
+       01 HRBedrag PIC $ZZZ9 VALUE ZERO.
        *> Overige variabelen
-       01 Keuze        PIC 99 VALUE ZERO.
+       01 Keuze PIC 99 VALUE ZERO.
        01 AantalBewoners PIC 9 VALUE ZERO.
        01 Reserveringsdatum PIC 9(8) VALUE ZERO.
        01 DatumVandaag PIC 9(8) VALUE ZERO.
@@ -83,8 +82,7 @@
        PROCEDURE DIVISION.
        BeginProgram.
            PERFORM DisplayMenu
-           STOP RUN
-           .
+           STOP RUN.
        DisplayMenu.
            PERFORM GetDatumVandaag
            PERFORM UNTIL VerlaatHetProgramma
@@ -123,13 +121,12 @@
                        PERFORM VerwerkMutaties
                    WHEN 47
                        SET VerlaatHetProgramma
-                               TO TRUE
+                         TO TRUE
                    WHEN OTHER
                        SET BlijfInHetMenu
-                               TO TRUE
+                         TO TRUE
                END-EVALUATE
-           END-PERFORM
-           .
+           END-PERFORM.
        RenderBezettingstabel.
            DISPLAY SPACE
            DISPLAY "BEZETTINGSOVERZICHT"
@@ -149,8 +146,7 @@
                    DISPLAY Weken(Huisjesteller, Wekenteller) WITH NO ADVANCING
                END-PERFORM
                DISPLAY SPACE
-           END-PERFORM
-           .
+           END-PERFORM.
        RenderOmzettentabel.
            DISPLAY SPACE
            DISPLAY "HUUROMZETTEN"
@@ -165,23 +161,19 @@
            DISPLAY "omzet " SPACE WITH NO ADVANCING
            PERFORM VARYING Wekenteller FROM 1 BY 1 UNTIL Wekenteller > 20
                MOVE Weekomzetten(Wekenteller)
-                               TO HRBedrag
+                 TO HRBedrag
                DISPLAY "|" HRBedrag SPACE WITH NO ADVANCING
            END-PERFORM
-           DISPLAY SPACE
-           .
+           DISPLAY SPACE.
        Bestandsinitialisatie.
            CALL "Bestandsinitialisatie".
 
        ToevoegenReservering.
            CALL "ToevoegenReservering".
 
-       ToevoegenReservering.
-           CALL "ToevoegenReservering".
-
        ToevoegenKlant.
            CALL "ToevoegenKlant".
-           
+
            .
        BezettingsOverzicht.
            PERFORM RB90-InitProgramma
@@ -199,18 +191,118 @@
                END-PERFORM
                *> Deze routines zijn overbodig: RB81, RB82, RB89
            END-IF
-           PERFORM RB99-AfsluitenProgramma
-           .
+           PERFORM RB99-AfsluitenProgramma.
        BerekeningHuuromzet.
-           CALL "BerekeningHuuromzet".
-       
+           PERFORM RB90-InitProgramma
+           IF NOT R-EOF
+               PERFORM RH80-InitVerwerking
+               PERFORM UNTIL R-EOF
+                   PERFORM RB70-InitWoning
+                   PERFORM UNTIL SKM-ReserveringIngelezen NOT EQUALS SKM-ReserveringBewaard
+                       PERFORM RH60-VerwerkReservering
+                       PERFORM RB61-LeesReservering
+                   END-PERFORM
+                   PERFORM RB71-BouwWoning
+                   PERFORM RB72-SchrijfWoning
+                   PERFORM RB79-AfsluitenWoning
+               END-PERFORM
+               *> Deze routines zijn overbodig: RB81, RB82, RB89
+           END-IF
+           PERFORM RH99-AfsluitenProgramma.
+
        MaakMutatieBestand.
            OPEN OUTPUT MutatieBestand
            IF NOT IO-OK
                DISPLAY ">>> Fout bij het openen van Mutaties.dat: " IOStatus
            END-IF
-           CLOSE MutatieBestand
+           CLOSE MutatieBestand.
+
+       RB90-InitProgramma.
+           SET R-NotEOF TO TRUE
+           OPEN INPUT ReserveringenBestand
+           MOVE ZERO TO FS-R-Woningnummer
+           START ReserveringenBestand
+             KEY > FS-R-Woningnummer
+           END-START
+           PERFORM RB61-LeesReservering.
+       RB99-AfsluitenProgramma.
+           PERFORM RenderBezettingstabel
+           CLOSE ReserveringenBestand.
+       RB80-InitVerwerking.
+           MOVE SKM-ReserveringIngelezen
+             TO SKM-ReserveringBewaard
+           *> Alle weekomzetten weer op nul zetten
+           PERFORM VARYING Teller FROM 1 BY 1 UNTIL Teller > 20
+               MOVE ZERO TO Weekomzetten(Teller)
+           END-PERFORM.
+       RB70-InitWoning.
+           MOVE SKM-ReserveringIngelezen
+             TO SKM-ReserveringBewaard.
+       RB71-BouwWoning.
            .
+
+       RB72-SchrijfWoning.
+           .
+       RB79-AfsluitenWoning.
+           .
+       RB60-VerwerkReservering.
+           *> Dit is de laatste subroutine waar we directe toegang hebben tot een gelezen record.
+           *> Daarom vind hier de verwerking plaats. In dit geval: het plaatsen van de juiste letters R.
+           *> Van belang zijn de velden FS-R-Woningnummer (voor de rij), FS-R-JaarWeek (de kolom),
+           *> en FS-R-AantalWeken (voor de iteratie).
+           IF (FS-R-Jaar EQUALS 2023)
+               PERFORM VARYING Teller FROM 1 BY 1 UNTIL Teller > FS-R-AantalWeken
+                   *> Onderscheid maken tussen boeking, reservering en verlopen
+                   MOVE "   R" TO Weken(FS-R-Woningnummer - 9, FS-R-Weeknummer - 18 + Teller)
+                   IF FS-R-DatumBetaling > "        "
+                       MOVE "   B"
+                         TO Weken(FS-R-Woningnummer - 9, FS-R-Weeknummer - 18 + Teller)
+                   END-IF
+
+                   IF FS-R-DatumVerlopen > "        "
+                       MOVE "   ."
+                         TO Weken(FS-R-Woningnummer - 9, FS-R-Weeknummer - 18 + Teller)
+                   END-IF
+                   IF FS-R-DatumAnnulering > "        "
+                       MOVE "   ."
+                         TO Weken(FS-R-Woningnummer - 9, FS-R-Weeknummer - 18 + Teller)
+                   END-IF
+               END-PERFORM
+           END-IF.
+       RB61-LeesReservering.
+           MOVE SKM-ReserveringIngelezen
+             TO SKM-ReserveringBewaard
+           READ ReserveringenBestand NEXT RECORD
+               AT END
+                   SET R-EOF TO TRUE
+               NOT AT END
+                   MOVE FS-R-Woningnummer
+                     TO SKM-R-N-Woningnummer
+                   DISPLAY "Read gedaan op huisje " FS-R-Woningnummer
+                   MOVE FS-R-JaarWeek
+                     TO SKM-R-N-Jaarweek
+           END-READ.
+
+       *> SUBROUTINES MET EEN AANGEPASTE INHOUD TBV BEREKENING HUUROMZETTEN
+       RH99-AfsluitenProgramma.
+           PERFORM RenderOmzettentabel
+           CLOSE ReserveringenBestand.
+       RH80-InitVerwerking.
+           MOVE SKM-ReserveringIngelezen
+             TO SKM-ReserveringBewaard
+           *> Alle weekomzetten weer op nul zetten
+           PERFORM VARYING Teller FROM 1 BY 1 UNTIL Teller > 20
+               MOVE ZERO TO Weekomzetten(Teller)
+           END-PERFORM.
+       RH60-VerwerkReservering.
+           *> Dit is de laatste subroutine waar we directe toegang hebben tot een gelezen record.
+           *> Daarom vind hier de verwerking plaats. In dit geval: het ophogen van de weekomzet.
+           IF (FS-R-Jaar EQUALS 2023)
+               PERFORM VARYING Teller FROM 0 BY 1 UNTIL Teller EQUALS FS-R-AantalWeken
+                   ADD 10 TO Weekomzetten(FS-R-Weeknummer - 17 + Teller)
+               END-PERFORM
+           END-IF.
+
        AnnuleerBoeking.
            .
        AnnuleerReservering.
@@ -242,47 +334,42 @@
                END-PERFORM
                PERFORM RM89-AfsluitenVerwerking
            END-IF
-           PERFORM RM99-AfsluitenProgramma
-           .
+           PERFORM RM99-AfsluitenProgramma.
        ToonAlleBoekingen.
            .
 
        RM90-InitialiseerProgramma.
            PERFORM GetDatumVandaag
-           SET KSK-NotAllEOF   TO TRUE
+           SET KSK-NotAllEOF TO TRUE
            OPEN I-O ReserveringenBestand
            DISPLAY ">>> Opening ReserveringenBestand. IOStatus: " IOStatus
            OPEN INPUT MutatieBestand
            DISPLAY ">>> Opening MutatieBestand. IOStatus: " IOStatus
            PERFORM RM61-LeesVolgendeReserveringOrigineel
            PERFORM RM63-LeesVolgendeMutatie
-           PERFORM RM79-ZetIteratieVoorwaarde
-           .
+           PERFORM RM79-ZetIteratieVoorwaarde.
        RM80-InitialiseerVerwerking.
            .
        RM70-InitialiseerReserveringsnummer.
-           SET GeenWijziging   TO TRUE
+           SET GeenWijziging TO TRUE
            SET GeenReserveringVerwerkt
-                               TO TRUE
+             TO TRUE
            MOVE FS-R-DatumCreatie
-                               TO Reserveringsdatum
-           .
+             TO Reserveringsdatum.
        RM60-VerwerkReserveringOrigineel.
            SET ReserveringVerwerkt
-                               TO TRUE
-           .
+             TO TRUE.
        RM61-LeesVolgendeReserveringOrigineel.
            IF (ReserveringVerwerkt)
                READ ReserveringenBestand NEXT RECORD
                    AT END
                        SET SKM-RM-EOF
-                               TO TRUE
+                         TO TRUE
                    NOT AT END
                        MOVE FS-R-Reserveringsnummer
-                               TO SKM-RM-Reserveringsnummer
+                         TO SKM-RM-Reserveringsnummer
                END-READ
-           END-IF
-           .
+           END-IF.
        RM71-TussenInit.
            .
        RM62-VerwerkMutatie.
@@ -290,59 +377,52 @@
                DISPLAY "Dit is een mutatie zonder reservering, dus we doen niks."
            ELSE
                SET WijzigingTeVerwerken
-                               TO TRUE
+                 TO TRUE
                EVALUATE FS-M-Mutatietype
                    WHEN "AR"
                        MOVE FS-M-Mutatiedatum
-                               TO FS-R-DatumAnnulering
+                         TO FS-R-DatumAnnulering
                    WHEN "BR"
                        MOVE FS-M-Mutatiedatum
-                               TO FS-R-DatumBetaling
+                         TO FS-R-DatumBetaling
                    WHEN "AB"
                        MOVE FS-M-Mutatiedatum
-                               TO FS-R-DatumAnnulering
+                         TO FS-R-DatumAnnulering
                END-EVALUATE
-           END-IF
-           .
+           END-IF.
        RM63-LeesVolgendeMutatie.
            READ MutatieBestand NEXT RECORD
                AT END
                    SET SKM-M-EOF
-                               TO TRUE
+                     TO TRUE
                NOT AT END
                    MOVE FS-M-Reserveringsnummer
-                               TO SKM-M-Reserveringsnummer
-           END-READ
-           .
+                     TO SKM-M-Reserveringsnummer
+           END-READ.
        RM72-TussenInit.
            IF (DatumVandaag - Reserveringsdatum > 5)
                MOVE DatumVandaag
-                               TO FS-R-DatumVerlopen
+                 TO FS-R-DatumVerlopen
                SET WijzigingTeVerwerken
-                               TO TRUE
-           END-IF
-           .
+                 TO TRUE
+           END-IF.
        RM64-BouwReserveringGemuteerd.
            .
        RM65-SchrijfReserveringGemuteerd.
-           REWRITE Reserveringsrecord
-           .
+           REWRITE Reserveringsrecord.
        RM73-AfsluitenReserveringsnummer.
            .
        RM79-ZetIteratieVoorwaarde.
            IF (SKM-RM < SKM-M)
-               MOVE SKM-RM     TO KSK
+               MOVE SKM-RM TO KSK
            ELSE
-               MOVE SKM-M      TO KSK
-           END-IF
-           .
+               MOVE SKM-M TO KSK
+           END-IF.
        RM89-AfsluitenVerwerking.
            .
        RM99-AfsluitenProgramma.
            CLOSE ReserveringenBestand
-           CLOSE MutatieBestand
-           .
+           CLOSE MutatieBestand.
        GetDatumVandaag.
            MOVE FUNCTION CURRENT-DATE (1:8)
-                               TO DatumVandaag
-           .
+             TO DatumVandaag.
