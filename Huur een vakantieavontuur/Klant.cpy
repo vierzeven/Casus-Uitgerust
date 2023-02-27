@@ -1,5 +1,5 @@
-      * Copybook Klant ani
-         03 (pf)-Klantnummer PIC 9(8) VALUE ZERO.
+      * Copybook Klant ani werkt in haar eigen branch
+         03 (pf)-Klantnummer PIC 9(6) VALUE ZERO.
          03 (pf)-Naam PIC X(24) VALUE SPACES.
          03 (pf)-Voornaam PIC X(24) VALUE SPACES.
          03 (pf)-Straat PIC X(24) VALUE SPACES.
