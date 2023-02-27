@@ -14,6 +14,7 @@
     <Compile Include="Opdracht0506.cbl" />
     <Compile Include="Program1.cbl" />
     <Compile Include="ToevoegenKlant.cbl" />
+    <Compile Include="ToevoegenReservering.cbl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Bewoner.cpy" />

@@ -1,4 +1,4 @@
-      * Copybook Klant ani
+      * Copybook Klant
          03 (pf)-Klantnummer PIC 9(8) VALUE ZERO.
          03 (pf)-Naam PIC X(24) VALUE SPACES.
          03 (pf)-Voornaam PIC X(24) VALUE SPACES.

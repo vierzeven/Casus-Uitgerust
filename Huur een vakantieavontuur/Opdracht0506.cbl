@@ -8,52 +8,8 @@
        Currency Sign "E" with Picture Symbol '$'.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-<<<<<<< HEAD
-       
-      *    SELECT ReserveringenBestand
-      *    ASSIGN TO "C:\COBOL\DATA\HUUR\Reserveringen.dat"
-      *    ORGANIZATION IS INDEXED
-      *    ACCESS MODE IS DYNAMIC
-      *    RECORD KEY IS FS-R-Reserveringsnummer
-      *    FILE STATUS IS IOStatus.
-
-=======
-       SELECT KlantenBestand
-           ASSIGN TO "C:\COBOL\DATA\HUUR\Klanten.dat"
-           ORGANIZATION IS INDEXED
-           ACCESS MODE IS DYNAMIC
-           RECORD KEY IS FS-K-Klantnummer
-           FILE STATUS IS IOStatus.
-       SELECT ReserveringenBestand
-           ASSIGN TO "C:\COBOL\DATA\HUUR\ReserveringenMetAltKey.dat"
-           ORGANIZATION IS INDEXED
-           ACCESS MODE IS DYNAMIC
-           RECORD KEY IS FS-R-Reserveringsnummer
-           ALTERNATE KEY IS FS-R-Woningnummer
-           WITH DUPLICATES
-           FILE STATUS IS IOStatus.
->>>>>>> a8499aaefa5d252af5542058e2e11d431fe80c9c
-       SELECT BewonersBestand
-           ASSIGN TO "C:\COBOL\DATA\HUUR\Bewoners.dat"
-           ORGANIZATION IS INDEXED
-           ACCESS MODE IS DYNAMIC
-           RECORD KEY IS FS-B-BewonersID
-           FILE STATUS IS IOStatus.
-       
-       SELECT MutatieBestand
-           ASSIGN TO "C:\COBOL\DATA\HUUR\Mutaties.dat"
-           ORGANIZATION IS LINE SEQUENTIAL
-           FILE STATUS IS IOStatus.
 
        DATA DIVISION.
-       FILE SECTION.
-
-       FD BewonersBestand.
-       01 Bewonersrecord.
-       COPY Bewoner REPLACING ==(pf)== BY ==FS-B==.
-       FD MutatieBestand.
-       01 Mutatierecord.
-       COPY Mutatie REPLACING ==(pf)== BY ==FS-M==.
 
        WORKING-STORAGE SECTION.
        *> Vlaggen
@@ -220,104 +176,13 @@
        ToevoegenReservering.
            CALL "ToevoegenReservering".
 
+       ToevoegenReservering.
+           CALL "ToevoegenReservering".
+
        ToevoegenKlant.
-<<<<<<< HEAD
            CALL "ToevoegenKlant".
            
-       ToevoegenReservering.
-=======
->>>>>>> a8499aaefa5d252af5542058e2e11d431fe80c9c
-           DISPLAY SPACE
-           OPEN I-O SysteemkengetallenBestand
-           IF NOT IO-OK
-               DISPLAY ">>> Fout bij het openen van SysteemkengetallenBestand.dat: " IOStatus
-           END-IF
-<<<<<<< HEAD
-           OPEN I-O ReserveringenBestand
-           IF NOT IO-OK
-               DISPLAY ">>> Fout bij het openen van Reserveringen.dat: " IOStatus
-           END-IF
-           READ SysteemkengetallenBestand
-           ADD 1               TO HoogsteReserveringsnummer
-           MOVE HoogsteReserveringsnummer
-                               TO FS-R-Reserveringsnummer
-           DISPLAY "Klantnummer: " WITH NO ADVANCING
-           ACCEPT FS-R-Klantnummer
-           DISPLAY "Woningnummer: " WITH NO ADVANCING
-           ACCEPT FS-R-Woningnummer
-           DISPLAY "Jaar: " WITH NO ADVANCING
-           ACCEPT FS-R-Jaar
-           IF FS-R-Jaar = ZERO
-               MOVE DatumVandaag(1:4)
-                               TO FS-R-Jaar
-           END-IF
-           DISPLAY "Weeknummer: " WITH NO ADVANCING
-           ACCEPT FS-R-Weeknummer
-           DISPLAY "Aantal weken: " WITH NO ADVANCING
-           ACCEPT FS-R-AantalWeken
-           DISPLAY "Datum creatie: " WITH NO ADVANCING
-           ACCEPT FS-R-DatumCreatie
-           IF FS-R-DatumCreatie = SPACE
-               MOVE DatumVandaag
-                               TO FS-R-DatumCreatie
-           END-IF
-           DISPLAY "Aantal bewoners: " WITH NO ADVANCING
-           ACCEPT AantalBewoners
-           PERFORM VARYING Teller FROM 1 BY 1 UNTIL Teller > AantalBewoners
-               OPEN I-O BewonersBestand
-               MOVE FS-R-Reserveringsnummer
-                               TO FS-B-Reserveringsnummer
-               MOVE Teller     TO FS-B-Volgnummer
-               DISPLAY "Initialen gast " Teller ": " WITH NO ADVANCING
-               ACCEPT FS-B-Initialen
-               DISPLAY "Geboortedatum gast " Teller ": " WITH NO ADVANCING
-               ACCEPT FS-B-Geboortedatum
-               WRITE Bewonersrecord
-               CLOSE BewonersBestand
-           END-PERFORM
-           WRITE Reserveringsrecord
-           DISPLAY ">>> Writing Reservering. IOStatus: " IOStatus
-           REWRITE Systeemkengetallenrecord
-           DISPLAY ">>> Rewriting Systeemkengetallen. IOStatus: " IOStatus
-           CLOSE SysteemkengetallenBestand
-           DISPLAY ">>> Closing SysteemkengetallenBestand. IOStatus: " IOStatus
-           CLOSE ReserveringenBestand
-           DISPLAY ">>> Closing ReserveringenBestand. IOStatus: " IOStatus
            .
-
-=======
-           OPEN I-O KlantenBestand
-           IF NOT IO-OK
-               DISPLAY ">>> Fout bij het openen van Klanten.dat: " IOStatus
-           END-IF
-           READ SysteemkengetallenBestand
-           ADD 1               TO HoogsteKlantennummer
-           MOVE HoogsteKlantennummer
-                               TO FS-K-Klantnummer
-           DISPLAY "Achternaam: " WITH NO ADVANCING
-           ACCEPT FS-K-Naam
-           DISPLAY "Voornaam: " WITH NO ADVANCING
-           ACCEPT FS-K-Voornaam
-           DISPLAY "Straat: " WITH NO ADVANCING
-           ACCEPT FS-K-Straat
-           DISPLAY "Huisnummer: " WITH NO ADVANCING
-           ACCEPT FS-K-Huisnummer
-           DISPLAY "Postcode: " WITH NO ADVANCING
-           ACCEPT FS-K-Postcode
-           DISPLAY "Woonplaats: " WITH NO ADVANCING
-           ACCEPT FS-K-Woonplaats
-           DISPLAY "Geboortedatum: " WITH NO ADVANCING
-           ACCEPT FS-K-Geboortedatum
-           DISPLAY "Telefoonnummer: " WITH NO ADVANCING
-           ACCEPT FS-K-Telefoonnummer
-           DISPLAY "E-mail: " WITH NO ADVANCING
-           ACCEPT FS-K-Emailadres
-           WRITE Klantrecord
-           REWRITE Systeemkengetallenrecord
-           CLOSE SysteemkengetallenBestand
-           CLOSE KlantenBestand
-           .
->>>>>>> a8499aaefa5d252af5542058e2e11d431fe80c9c
        BezettingsOverzicht.
            PERFORM RB90-InitProgramma
            IF NOT R-EOF
