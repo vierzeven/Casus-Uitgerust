@@ -4,7 +4,10 @@
        working-storage section.
 
        procedure division.
+      
+           DISPLAY "CONFLICT"
 
            goback.
 
        end program Program1.
+       
