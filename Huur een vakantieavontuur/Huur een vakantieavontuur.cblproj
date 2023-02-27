@@ -12,7 +12,7 @@
   <ItemGroup>
     <Compile Include="Opdracht0506.cbl" />
     <Compile Include="Program1.cbl" />
-    <Compile Include="test-joey.cbl" />
+    <Compile Include="ToevoegenReservering.cbl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Bewoner.cpy" />
