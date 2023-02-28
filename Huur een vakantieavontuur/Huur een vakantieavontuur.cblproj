@@ -1,0 +1,28 @@
+<Project Sdk="MicroFocus.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <OutputName>
+    </OutputName>
+    <RootNamespace>Huur_een_vakantieavontuur</RootNamespace>
+    <AutoGenerateBindingRedirects>False</AutoGenerateBindingRedirects>
+    <StartupObject>Main</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Bestandsinitialisatie.cbl" />
+    <Compile Include="Main.cbl" />
+    <Compile Include="Opdracht0506.cbl" />
+    <Compile Include="BerekeningHuuromzet.cbl" />
+    <Compile Include="BezettingsOverzicht.cbl" />
+    <Compile Include="ToevoegenKlant.cbl" />
+    <Compile Include="ToevoegenReservering.cbl" />
+    <Compile Include="VerwerkMutatie.cbl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Bewoner.cpy" />
+    <None Include="Klant.cpy" />
+    <None Include="Mutatie.cpy" />
+    <None Include="Reservering.cpy" />
+  </ItemGroup>
+</Project>
