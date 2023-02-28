@@ -6,11 +6,12 @@
     <OutputName>
     </OutputName>
     <RootNamespace>Huur_een_vakantieavontuur</RootNamespace>
-    <StartupObject>Opdracht0506</StartupObject>
     <AutoGenerateBindingRedirects>False</AutoGenerateBindingRedirects>
+    <StartupObject>Main</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Bestandsinitialisatie.cbl" />
+    <Compile Include="Main.cbl" />
     <Compile Include="Opdracht0506.cbl" />
     <Compile Include="BerekeningHuuromzet.cbl" />
     <Compile Include="BezettingsOverzicht.cbl" />

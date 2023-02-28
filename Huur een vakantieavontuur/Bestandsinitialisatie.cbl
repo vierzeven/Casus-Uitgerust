@@ -151,6 +151,6 @@
            CLOSE SysteemkengetallenBestand
            CLOSE ReserveringenBestand.
 
-       end program Program2.
+           EXIT PROGRAM.
 
        

@@ -55,6 +55,7 @@
 
        PROCEDURE DIVISION.
 
+       BeginProgram.
            PERFORM RB90-InitProgramma
            IF NOT R-EOF
                PERFORM RH80-InitVerwerking
@@ -71,7 +72,8 @@
                END-PERFORM
                *> Deze routines zijn overbodig: RB81, RB82, RB89
            END-IF
-           PERFORM RH99-AfsluitenProgramma.
+           PERFORM RH99-AfsluitenProgramma
+           EXIT PROGRAM.
        
        RH60-VerwerkReservering.
            *> Dit is de laatste subroutine waar we directe toegang hebben tot een gelezen record.
@@ -91,7 +93,6 @@
                NOT AT END
                    MOVE FS-R-Woningnummer
                      TO SKM-R-N-Woningnummer
-                   DISPLAY "Read gedaan op huisje " FS-R-Woningnummer
                    MOVE FS-R-JaarWeek
                      TO SKM-R-N-Jaarweek
            END-READ.

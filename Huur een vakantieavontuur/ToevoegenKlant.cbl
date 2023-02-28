@@ -74,4 +74,4 @@
            CLOSE SysteemkengetallenBestand
            CLOSE KlantenBestand.
 
-       end program Program2.
+       EXIT PROGRAM.

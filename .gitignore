@@ -364,4 +364,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /Huur een vakantieavontuur/Huur een vakantieavontuur.dep
 /.gitignore
-/.gitignore
+/Huur een vakantieavontuur/Huur een vakantieavontuur.cblproj
+/Huur een vakantieavontuur/Huur een vakantieavontuur.dep
