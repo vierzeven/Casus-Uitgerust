@@ -146,8 +146,40 @@
            MOVE "000000050000000419202336220230208"
              TO Reserveringsrecord
            WRITE Reserveringsrecord
-           MOVE 5 TO HoogsteReserveringsnummer
+           *> Woning 12, onderhoud van 01-05-2023 t/m 10-05-2023
+           MOVE SPACES TO Reserveringsrecord
+           MOVE 6 TO FS-R-Reserveringsnummer
+      *    MOVE 0 TO FS-R-Klantnummer
+           MOVE 12 TO FS-R-Woningnummer
+      *    MOVE ZERO TO FS-R-JaarWeek
+      *    MOVE ZERO TO FS-R-AantalWeken
+           MOVE "20230209" TO FS-R-DatumCreatie
+      *    MOVE SPACES TO FS-R-DatumAnnulering
+      *    MOVE SPACES TO FS-R-DatumBetaling
+      *    MOVE SPACES TO FS-R-DatumVerlopen
+           MOVE "20230501" TO FS-R-DatumStartOnderhoud
+           MOVE "20230510" TO FS-R-DatumEindOnderhoud
+      *    MOVE SPACES TO FS-R-DatumVerkoop
+           WRITE Reserveringsrecord
+           *> Woning 11, verkocht vanaf 01-06-2023
+           MOVE SPACES TO Reserveringsrecord
+           MOVE 7 TO FS-R-Reserveringsnummer
+      *    MOVE 0 TO FS-R-Klantnummer
+           MOVE 11 TO FS-R-Woningnummer
+      *    MOVE ZERO TO FS-R-JaarWeek
+      *    MOVE ZERO TO FS-R-AantalWeken
+           MOVE "20230210" TO FS-R-DatumCreatie
+      *    MOVE SPACES TO FS-R-DatumAnnulering
+      *    MOVE SPACES TO FS-R-DatumBetaling
+      *    MOVE SPACES TO FS-R-DatumVerlopen
+      *    MOVE SPACES TO FS-R-DatumStartOnderhoud
+      *    MOVE SPACES TO FS-R-DatumEindOnderhoud
+           MOVE "20230601" TO FS-R-DatumVerkoop
+           WRITE Reserveringsrecord
+           *> Update systeemkengetallen
+           MOVE 7 TO HoogsteReserveringsnummer
            REWRITE Systeemkengetallenrecord
+           *> Sluit bestanden
            CLOSE SysteemkengetallenBestand
            CLOSE ReserveringenBestand.
 
