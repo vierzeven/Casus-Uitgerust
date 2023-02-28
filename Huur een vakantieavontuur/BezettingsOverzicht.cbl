@@ -154,7 +154,9 @@
                END-PERFORM
                *> Deze routines zijn overbodig: RB81, RB82, RB89
            END-IF
-           PERFORM RB99-AfsluitenProgramma.
+           PERFORM RB99-AfsluitenProgramma
+           EXIT PROGRAM
+           .
 
        RB90-InitProgramma.
            SET R-NotEOF TO TRUE
@@ -217,7 +219,6 @@
                NOT AT END
                    MOVE FS-R-Woningnummer
                      TO SKM-R-N-Woningnummer
-                   DISPLAY "Read gedaan op huisje " FS-R-Woningnummer
                    MOVE FS-R-JaarWeek
                      TO SKM-R-N-Jaarweek
            END-READ.
