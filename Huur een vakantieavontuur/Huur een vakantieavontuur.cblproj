@@ -12,8 +12,8 @@
   <ItemGroup>
     <Compile Include="Bestandsinitialisatie.cbl" />
     <Compile Include="Opdracht0506.cbl" />
-    <Compile Include="Program1.cbl" />
     <Compile Include="BerekeningHuuromzet.cbl" />
+    <Compile Include="BezettingsOverzicht.cbl" />
     <Compile Include="ToevoegenKlant.cbl" />
     <Compile Include="ToevoegenReservering.cbl" />
   </ItemGroup>
