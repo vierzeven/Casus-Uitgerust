@@ -6,17 +6,17 @@
     <OutputName>
     </OutputName>
     <RootNamespace>Huur_een_vakantieavontuur</RootNamespace>
-    <StartupObject>Huur_een_vakantieavontuur.ToevoegenKlant</StartupObject>
     <AutoGenerateBindingRedirects>False</AutoGenerateBindingRedirects>
+    <StartupObject>Main</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Bestandsinitialisatie.cbl" />
+    <Compile Include="Main.cbl" />
     <Compile Include="Opdracht0506.cbl" />
     <Compile Include="BerekeningHuuromzet.cbl" />
     <Compile Include="BezettingsOverzicht.cbl" />
     <Compile Include="ToevoegenKlant.cbl" />
     <Compile Include="ToevoegenReservering.cbl" />
-    <Compile Include="VerwerkMutatie.cbl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Bewoner.cpy" />
