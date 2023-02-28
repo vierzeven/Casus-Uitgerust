@@ -129,10 +129,12 @@
            *> Woning 15, week 32, 1 week
            MOVE "000000010000000115202332120230203"
              TO Reserveringsrecord
+           MOVE "20230210" TO FS-R-DatumAnnulering
            WRITE Reserveringsrecord
            *> Woning 10, week 20, 3 weken
            MOVE "000000020000000110202320320230204"
              TO Reserveringsrecord
+           MOVE "20230210" TO FS-R-DatumVerlopen
            WRITE Reserveringsrecord
            *> Woning 17, week 18, 5 weken
            MOVE "000000030000000217202318520230205"
@@ -145,9 +147,45 @@
            *> Woning 19, week 36, 2 weken
            MOVE "000000050000000419202336220230208"
              TO Reserveringsrecord
+           MOVE "20230210" TO FS-R-DatumBetaling
            WRITE Reserveringsrecord
-           MOVE 5 TO HoogsteReserveringsnummer
+
+           *> Woning 12, onderhoud in week 18 en 19
+           MOVE SPACES TO Reserveringsrecord
+           MOVE 6 TO FS-R-Reserveringsnummer
+           MOVE 12 TO FS-R-Woningnummer
+           MOVE "20230209" TO FS-R-DatumCreatie
+           MOVE "O" TO FS-R-ReserveringsType
+           MOVE 2023 TO FS-R-Jaar
+           MOVE 18 TO FS-R-Weeknummer
+           MOVE 2 TO FS-R-AantalWeken
+           WRITE Reserveringsrecord
+
+           *> Woning 11, verkocht vanaf 01-06-2023
+           MOVE SPACES TO Reserveringsrecord
+           MOVE 7 TO FS-R-Reserveringsnummer
+           MOVE 11 TO FS-R-Woningnummer
+           MOVE "20230210" TO FS-R-DatumCreatie
+           MOVE "V" TO FS-R-ReserveringsType
+           MOVE 2023 TO FS-R-Jaar
+           MOVE 22 TO FS-R-Weeknummer
+           WRITE Reserveringsrecord
+
+           *> Woning 12, onderhoud in week 31 t/m 34
+           MOVE SPACES TO Reserveringsrecord
+           MOVE 8 TO FS-R-Reserveringsnummer
+           MOVE 12 TO FS-R-Woningnummer
+           MOVE "20230209" TO FS-R-DatumCreatie
+           MOVE "O" TO FS-R-ReserveringsType
+           MOVE 2023 TO FS-R-Jaar
+           MOVE 31 TO FS-R-Weeknummer
+           MOVE 4 TO FS-R-AantalWeken
+           WRITE Reserveringsrecord
+
+           *> Update systeemkengetallen
+           MOVE 8 TO HoogsteReserveringsnummer
            REWRITE Systeemkengetallenrecord
+           *> Sluit bestanden
            CLOSE SysteemkengetallenBestand
            CLOSE ReserveringenBestand.
 

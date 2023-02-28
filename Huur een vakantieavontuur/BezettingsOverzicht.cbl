@@ -135,6 +135,7 @@
        01 AantalBewoners PIC 9 VALUE ZERO.
        01 Reserveringsdatum PIC 9(8) VALUE ZERO.
        01 DatumVandaag PIC 9(8) VALUE ZERO.
+       01 AantalOvergeblevenWeken PIC 99 VALUE ZERO.
 
        PROCEDURE DIVISION.
        BeginProgram.
@@ -173,9 +174,10 @@
            MOVE SKM-ReserveringIngelezen
              TO SKM-ReserveringBewaard
            *> Alle weekomzetten weer op nul zetten
-           PERFORM VARYING Teller FROM 1 BY 1 UNTIL Teller > 20
-               MOVE ZERO TO Weekomzetten(Teller)
-           END-PERFORM.
+      *    PERFORM VARYING Teller FROM 1 BY 1 UNTIL Teller > 20
+      *        MOVE ZERO TO Weekomzetten(Teller)
+      *    END-PERFORM
+           .
        RB70-InitWoning.
            MOVE SKM-ReserveringIngelezen
              TO SKM-ReserveringBewaard.
@@ -192,23 +194,36 @@
            *> Van belang zijn de velden FS-R-Woningnummer (voor de rij), FS-R-JaarWeek (de kolom),
            *> en FS-R-AantalWeken (voor de iteratie).
            IF (FS-R-Jaar EQUALS 2023)
-               PERFORM VARYING Teller FROM 1 BY 1 UNTIL Teller > FS-R-AantalWeken
-                   *> Onderscheid maken tussen boeking, reservering en verlopen
-                   MOVE "   R" TO Weken(FS-R-Woningnummer - 9, FS-R-Weeknummer - 18 + Teller)
-                   IF FS-R-DatumBetaling > "        "
-                       MOVE "   B"
+               IF FS-R-ReserveringsType EQUALS "V" 
+                   COMPUTE AantalOvergeblevenWeken = 38 - FS-R-Weeknummer
+                   PERFORM VARYING Teller FROM 1 BY 1 UNTIL Teller > AantalOvergeblevenWeken
+                       MOVE "   V"
                          TO Weken(FS-R-Woningnummer - 9, FS-R-Weeknummer - 18 + Teller)
-                   END-IF
+                   END-PERFORM
+               ELSE
+                   PERFORM VARYING Teller FROM 1 BY 1 UNTIL Teller > FS-R-AantalWeken
+                       *> Onderscheid maken tussen boeking, reservering en verlopen
+                       MOVE "   R" TO Weken(FS-R-Woningnummer - 9, FS-R-Weeknummer - 18 + Teller)
+                       IF FS-R-DatumBetaling > "        "
+                           MOVE "   B"
+                             TO Weken(FS-R-Woningnummer - 9, FS-R-Weeknummer - 18 + Teller)
+                       END-IF
 
-                   IF FS-R-DatumVerlopen > "        "
-                       MOVE "   ."
-                         TO Weken(FS-R-Woningnummer - 9, FS-R-Weeknummer - 18 + Teller)
-                   END-IF
-                   IF FS-R-DatumAnnulering > "        "
-                       MOVE "   ."
-                         TO Weken(FS-R-Woningnummer - 9, FS-R-Weeknummer - 18 + Teller)
-                   END-IF
-               END-PERFORM
+                       IF FS-R-DatumVerlopen > "        "
+                           MOVE "   ."
+                             TO Weken(FS-R-Woningnummer - 9, FS-R-Weeknummer - 18 + Teller)
+                       END-IF
+                       IF FS-R-DatumAnnulering > "        "
+                           MOVE "   ."
+                             TO Weken(FS-R-Woningnummer - 9, FS-R-Weeknummer - 18 + Teller)
+                       END-IF
+                       IF FS-R-ReserveringsType EQUALS "O"
+                           MOVE "   O"
+                             TO Weken(FS-R-Woningnummer - 9, FS-R-Weeknummer - 18 + Teller)
+                       END-IF
+                   END-PERFORM
+               END-IF
+
            END-IF.
        RB61-LeesReservering.
            MOVE SKM-ReserveringIngelezen
@@ -217,6 +232,8 @@
                AT END
                    SET R-EOF TO TRUE
                NOT AT END
+               DISPLAY Reserveringsrecord
+               DISPLAY "Type:" FS-R-ReserveringsType
                    MOVE FS-R-Woningnummer
                      TO SKM-R-N-Woningnummer
                    MOVE FS-R-JaarWeek
