@@ -1,11 +1,10 @@
-       program-id. Program2 as "Huur_een_vakantieavontuur.Bestandsinitialisatie".
+       PROGRAM-ID. Program2 as "Huur_een_vakantieavontuur.Bestandsinitialisatie".
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
        SPECIAL-NAMES.
               Currency Sign "E" with Picture Symbol '$'.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-
        SELECT WoningenBestand
                   ASSIGN TO "C:\COBOL\DATA\HUUR\Woningen.dat"
                   ORGANIZATION IS LINE SEQUENTIAL
