@@ -3,13 +3,55 @@
        AUTHOR. Joey Schmitz.
        DATE-WRITTEN. 02-2023.
        ENVIRONMENT DIVISION.
-       CONFIGURATION SECTION.
-       SPECIAL-NAMES.
-       Currency Sign "E" with Picture Symbol '$'.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-
+       SELECT KlantenBestand
+           ASSIGN TO "C:\COBOL\DATA\HUUR\Klanten.dat"
+           ORGANIZATION IS INDEXED
+           ACCESS MODE IS DYNAMIC
+           RECORD KEY IS FS-K-Klantnummer
+           FILE STATUS IS IOStatus.
+       SELECT ReserveringenBestand
+           ASSIGN TO "C:\COBOL\DATA\HUUR\ReserveringenMetAltKey.dat"
+           ORGANIZATION IS INDEXED
+           ACCESS MODE IS DYNAMIC
+           RECORD KEY IS FS-R-Reserveringsnummer
+           ALTERNATE KEY IS FS-R-Woningnummer
+           WITH DUPLICATES
+           FILE STATUS IS IOStatus.
+       SELECT BewonersBestand
+           ASSIGN TO "C:\COBOL\DATA\HUUR\Bewoners.dat"
+           ORGANIZATION IS INDEXED
+           ACCESS MODE IS DYNAMIC
+           RECORD KEY IS FS-B-BewonersID
+           FILE STATUS IS IOStatus.
+       SELECT WoningenBestand
+           ASSIGN TO "C:\COBOL\DATA\HUUR\Woningen.dat"
+           ORGANIZATION IS LINE SEQUENTIAL
+           FILE STATUS IS IOStatus.
+       SELECT SysteemkengetallenBestand
+           ASSIGN TO "C:\COBOL\DATA\HUUR\Systeemkengetallen.dat"
+           ORGANIZATION IS LINE SEQUENTIAL
+           FILE STATUS IS IOStatus.
        DATA DIVISION.
+       FILE SECTION.
+       FD KlantenBestand.
+       01 Klantrecord.
+       COPY Klant REPLACING ==(pf)== BY ==FS-K==.
+       FD ReserveringenBestand.
+       01 Reserveringsrecord.
+       COPY Reservering REPLACING ==(pf)== BY ==FS-R==.
+       FD BewonersBestand.
+       01 Bewonersrecord.
+       COPY Bewoner REPLACING ==(pf)== BY ==FS-B==.
+       FD WoningenBestand.
+       01 Woningrecord.
+         03 Woningnummer PIC 99 VALUE ZERO.
+         03 Woningtype PIC X VALUE "S".
+       FD SysteemkengetallenBestand.
+       01 Systeemkengetallenrecord.
+         03 HoogsteKlantennummer PIC 9(8) VALUE ZERO.
+         03 HoogsteReserveringsnummer PIC 9(8) VALUE ZERO.
 
        WORKING-STORAGE SECTION.
        *> Vlaggen
@@ -70,7 +112,7 @@
 
        *> Tellers
        01 Teller       PIC 99 VALUE ZERO.
-       *>01 Huisjesteller PIC 99 VALUE ZERO.
+       01 Huisjesteller PIC 99 VALUE ZERO.
        01 Wekenteller  PIC 99 VALUE ZERO.
        *> HumanReadable variabelen
        01 HRBedrag     PIC $ZZZ9 VALUE ZERO.

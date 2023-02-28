@@ -25,6 +25,11 @@
            ACCESS MODE IS DYNAMIC
            RECORD KEY IS FS-B-BewonersID
            FILE STATUS IS IOStatus.
+       SELECT MutatieBestand
+           ASSIGN TO "C:\COBOL\DATA\HUUR\Mutaties.dat"
+           ORGANIZATION IS LINE SEQUENTIAL
+           FILE STATUS IS IOStatus.
+
        SELECT WoningenBestand
            ASSIGN TO "C:\COBOL\DATA\HUUR\Woningen.dat"
            ORGANIZATION IS LINE SEQUENTIAL
@@ -53,13 +58,16 @@
        01 Systeemkengetallenrecord.
          03 HoogsteKlantennummer PIC 9(8) VALUE ZERO.
          03 HoogsteReserveringsnummer PIC 9(8) VALUE ZERO.
+                FD MutatieBestand.
+       01 Mutatierecord.
+       COPY Mutatie REPLACING ==(pf)== BY ==FS-M==.
        WORKING-STORAGE SECTION.
        01 IOStatus PIC 99 VALUE ZERO.
          88 IO-OK VALUE ZERO.
        01 DatumVandaag PIC 9(8) VALUE ZERO.
        01 AantalBewoners PIC 9 VALUE ZERO.
        01 Teller PIC 99 VALUE ZERO.
-
+       01 HuisjesTeller PIC 99 VALUE ZERO.
 
        PROCEDURE DIVISION.
        BeginProgram.
@@ -118,8 +126,4 @@
            DISPLAY ">>> Closing SysteemkengetallenBestand. IOStatus: " IOStatus
            CLOSE ReserveringenBestand
            DISPLAY ">>> Closing ReserveringenBestand. IOStatus: " IOStatus
-           EXIT PROGRAM .
-
-
-           
-
+           EXIT PROGRAM.
