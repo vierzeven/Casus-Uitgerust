@@ -48,7 +48,7 @@
                    WHEN 8
                        CALL "BetaalReservering"
                    WHEN 9
-                       CALL "VerwerkMutaties"
+                       CALL "VerwerkMutatie"
                    WHEN 47
                        SET VerlaatHetProgramma
                          TO TRUE

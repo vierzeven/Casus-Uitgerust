@@ -7,10 +7,11 @@
     </OutputName>
     <RootNamespace>Huur_een_vakantieavontuur</RootNamespace>
     <AutoGenerateBindingRedirects>False</AutoGenerateBindingRedirects>
-    <StartupObject>Main</StartupObject>
+    <StartupObject>Huur_een_vakantieavontuur.AnnuleerBoeking</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Bestandsinitialisatie.cbl" />
+    <Compile Include="AnnuleerBoeking.cbl" />
     <Compile Include="Main.cbl" />
     <Compile Include="Opdracht0506.cbl" />
     <Compile Include="BerekeningHuuromzet.cbl" />
