@@ -10,6 +10,5 @@
          03 (pf)-DatumAnnulering PIC X(8) VALUE ZERO.
          03 (pf)-DatumBetaling PIC X(8) VALUE ZERO.
          03 (pf)-DatumVerlopen PIC X(8) VALUE ZERO.
-         03 (pf)-DatumStartOnderhoud PIC X(8) VALUE ZERO.
-         03 (pf)-DatumEindOnderhoud PIC X(8) VALUE ZERO.
-         03 (pf)-DatumVerkoop PIC X(8) VALUE ZERO.
+         03 (pf)-ReserveringsType PIC X VALUE SPACE.
+
