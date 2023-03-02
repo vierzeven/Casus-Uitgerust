@@ -28,8 +28,11 @@
            CALL "ToevoegenReservering" USING BY REFERENCE FS-R-Reserveringsnummer
 
            OPEN I-O ReserveringenBestand
+           READ ReserveringenBestand 
+               KEY IS FS-R-Reserveringsnummer
            MOVE FS-R-DatumCreatie TO FS-R-DatumBetaling
-           REWRITE Reserveringsrecord. 
+           REWRITE Reserveringsrecord 
+           CLOSE ReserveringenBestand
 
        END PROGRAM LastMinuteBoeking.
        

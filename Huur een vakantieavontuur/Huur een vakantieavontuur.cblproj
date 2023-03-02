@@ -24,6 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Bewoner.cpy" />
+    <None Include="Reserveringsnummer.cpy" />
     <None Include="Klant.cpy" />
     <None Include="Mutatie.cpy" />
     <None Include="Reservering.cpy" />

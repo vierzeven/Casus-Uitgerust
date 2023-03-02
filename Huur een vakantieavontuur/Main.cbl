@@ -11,12 +11,13 @@
 
        01 DatumVandaag PIC 9(8) VALUE ZERO.
 
+       01 Reserveringsnummer PIC 9(8) VALUE ZEROES.
 
        PROCEDURE DIVISION.
        BeginProgram.
-           *>>>>>> TODO: Weghalen zodra in productie
+      *>> >>>> TODO: Weghalen zodra in productie
            CALL "Bestandsinitialisatie"
-           *>>>>>> END TODO
+             *>> >>>> END TODO
            PERFORM GetDatumVandaag
            PERFORM UNTIL VerlaatHetProgramma
                DISPLAY SPACE
@@ -40,7 +41,8 @@
                    WHEN 1
                        CALL "ToevoegenKlant"
                    WHEN 2
-                       CALL "ToevoegenReservering"
+                       CALL "ToevoegenReservering" USING BY REFERENCE Reserveringsnummer
+                       DISPLAY "Aangemaakt reservering met nr: " Reserveringsnummer
                    WHEN 3
                        CALL "BetaalReservering"
                    WHEN 4
