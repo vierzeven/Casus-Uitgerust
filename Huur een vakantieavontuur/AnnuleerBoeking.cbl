@@ -67,7 +67,7 @@
            
            PERFORM ToonReservering
            
-           STOP RUN.
+           EXIT PROGRAM.
 
        OpvragenResNummer.
 
