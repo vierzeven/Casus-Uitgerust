@@ -14,6 +14,9 @@
 
        PROCEDURE DIVISION.
        BeginProgram.
+           *>>>>>> TODO: Weghalen zodra in productie
+           CALL "Bestandsinitialisatie"
+           *>>>>>> END TODO
            PERFORM GetDatumVandaag
            PERFORM UNTIL VerlaatHetProgramma
                DISPLAY SPACE
