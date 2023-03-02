@@ -20,36 +20,39 @@
            PERFORM GetDatumVandaag
            PERFORM UNTIL VerlaatHetProgramma
                DISPLAY SPACE
-               DISPLAY "1. Bestandsinitialisatie"
-               DISPLAY "2. Toevoegen Klant"
-               DISPLAY "3. Toevoegen Reservering"
-               DISPLAY "4. Bezettingsoverzicht"
-               DISPLAY "5. Berekening Huuromzet"
-               DISPLAY "6. Annuleer Boeking"
+               DISPLAY "0. Bestandsinitialisatie"
+               DISPLAY "1. Toevoegen Klant"
+               DISPLAY "2. Toevoegen Reservering"
+               DISPLAY "3. Betaal Reservering"
+               DISPLAY "4. Last Minute Boeking"
+               DISPLAY "5. Bezettingsoverzicht"
+               DISPLAY "6. Berekening Huuromzet"
                DISPLAY "7. Annuleer Reservering"
-               DISPLAY "8. Betaal Reservering"
+               DISPLAY "8. Annuleer Boeking"
                DISPLAY "9. Verwerk mutaties"
                DISPLAY "47. EXIT"
                DISPLAY SPACE
                DISPLAY "Uw keuze: " WITH NO ADVANCING
                ACCEPT Keuze
                EVALUATE Keuze
-                   WHEN 1
+                   WHEN 0
                        CALL "Bestandsinitialisatie"
-                   WHEN 2
+                   WHEN 1
                        CALL "ToevoegenKlant"
-                   WHEN 3
+                   WHEN 2
                        CALL "ToevoegenReservering"
+                   WHEN 3
+                       CALL "BetaalReservering"
                    WHEN 4
-                       CALL "BezettingsOverzicht"
+                       CALL "LastMinuteBoeking"
                    WHEN 5
-                       CALL "BerekeningHuuromzet"
+                       CALL "BezettingsOverzicht"
                    WHEN 6
-                       CALL "AnnuleerBoeking"
+                       CALL "BerekeningHuuromzet"
                    WHEN 7
                        CALL "AnnuleerReservering"
                    WHEN 8
-                       CALL "BetaalReservering"
+                       CALL "AnnuleerBoeking"
                    WHEN 9
                        CALL "VerwerkMutatie"
                    WHEN 47
