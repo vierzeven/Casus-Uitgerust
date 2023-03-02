@@ -69,7 +69,10 @@
        01 Teller PIC 99 VALUE ZERO.
        01 HuisjesTeller PIC 99 VALUE ZERO.
 
-       PROCEDURE DIVISION.
+       LINKAGE SECTION.
+       01 Reserveringsnummer PIC 9(8) VALUE ZEROES.
+
+       PROCEDURE DIVISION USING Reserveringsnummer.
        BeginProgram.
            DISPLAY SPACE
            OPEN I-O SysteemkengetallenBestand
@@ -83,7 +86,7 @@
            READ SysteemkengetallenBestand
            ADD 1 TO HoogsteReserveringsnummer
            MOVE HoogsteReserveringsnummer
-             TO FS-R-Reserveringsnummer
+             TO FS-R-Reserveringsnummer, Reserveringsnummer
            DISPLAY "Klantnummer: " WITH NO ADVANCING
            ACCEPT FS-R-Klantnummer
            DISPLAY "Woningnummer: " WITH NO ADVANCING

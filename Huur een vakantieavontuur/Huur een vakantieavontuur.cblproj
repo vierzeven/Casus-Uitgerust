@@ -16,6 +16,7 @@
     <Compile Include="Opdracht0506.cbl" />
     <Compile Include="BerekeningHuuromzet.cbl" />
     <Compile Include="BezettingsOverzicht.cbl" />
+    <Compile Include="LastMinuteBoeking.cbl" />
     <Compile Include="test summary reports\06. annuleer boeking.cbl" />
     <Compile Include="ToevoegenKlant.cbl" />
     <Compile Include="ToevoegenReservering.cbl" />
