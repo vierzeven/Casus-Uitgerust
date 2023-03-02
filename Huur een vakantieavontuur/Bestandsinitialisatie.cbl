@@ -126,12 +126,12 @@
            IF NOT IO-OK
                DISPLAY ">>> Fout bij het openen van Reserveringen.dat: " IOStatus
            END-IF
-           *> Woning 15, week 32, 1 week
+           *> Woning 15, week 32, 1 week, geannuleerd
            MOVE "000000010000000115202332120230203"
              TO Reserveringsrecord
            MOVE "20230210" TO FS-R-DatumAnnulering
            WRITE Reserveringsrecord
-           *> Woning 10, week 20, 3 weken
+           *> Woning 10, week 20, 3 weken, verlopen
            MOVE "000000020000000110202320320230204"
              TO Reserveringsrecord
            MOVE "20230210" TO FS-R-DatumVerlopen

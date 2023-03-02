@@ -30,6 +30,8 @@
                DISPLAY "7. Annuleer Reservering"
                DISPLAY "8. Annuleer Boeking"
                DISPLAY "9. Verwerk mutaties"
+               DISPLAY "10. Plan onderhoud woning"
+               DISPLAY "11. Plan verkoop woning"
                DISPLAY "47. EXIT"
                DISPLAY SPACE
                DISPLAY "Uw keuze: " WITH NO ADVANCING
@@ -55,6 +57,10 @@
                        CALL "AnnuleerBoeking"
                    WHEN 9
                        CALL "VerwerkMutatie"
+                   WHEN 10
+                       CALL "PlanOnderhoud"
+                   WHEN 11
+                       CALL "PlanVerkoop"
                    WHEN 47
                        SET VerlaatHetProgramma
                          TO TRUE
