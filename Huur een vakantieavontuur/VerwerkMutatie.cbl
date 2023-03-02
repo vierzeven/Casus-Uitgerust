@@ -116,7 +116,9 @@
                        PERFORM RM64-BouwReserveringGemuteerd
                        PERFORM RM65-SchrijfReserveringGemuteerd
                    END-IF
-                   PERFORM RM61-LeesVolgendeReserveringOrigineel
+                   IF SKM-RM EQUALS KSK
+                       PERFORM RM61-LeesVolgendeReserveringOrigineel
+                   END-IF
                    PERFORM RM73-AfsluitenReserveringsnummer
                    PERFORM RM79-ZetIteratieVoorwaarde
                END-PERFORM
