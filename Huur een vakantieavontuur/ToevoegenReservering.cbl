@@ -69,7 +69,10 @@
        01 Teller PIC 99 VALUE ZERO.
        01 HuisjesTeller PIC 99 VALUE ZERO.
 
-       PROCEDURE DIVISION.
+       LINKAGE SECTION.
+       COPY Reserveringsnummer REPLACING ==(pf)== BY ==LS==.
+
+       PROCEDURE DIVISION USING LS-Reserveringsnummer.
        BeginProgram.
            DISPLAY SPACE
            OPEN I-O SysteemkengetallenBestand
@@ -83,7 +86,7 @@
            READ SysteemkengetallenBestand
            ADD 1 TO HoogsteReserveringsnummer
            MOVE HoogsteReserveringsnummer
-             TO FS-R-Reserveringsnummer
+             TO FS-R-Reserveringsnummer, LS-Reserveringsnummer
            DISPLAY "Klantnummer: " WITH NO ADVANCING
            ACCEPT FS-R-Klantnummer
            DISPLAY "Woningnummer: " WITH NO ADVANCING
@@ -119,11 +122,7 @@
                CLOSE BewonersBestand
            END-PERFORM
            WRITE Reserveringsrecord
-           DISPLAY ">>> Writing Reservering. IOStatus: " IOStatus
            REWRITE Systeemkengetallenrecord
-           DISPLAY ">>> Rewriting Systeemkengetallen. IOStatus: " IOStatus
            CLOSE SysteemkengetallenBestand
-           DISPLAY ">>> Closing SysteemkengetallenBestand. IOStatus: " IOStatus
            CLOSE ReserveringenBestand
-           DISPLAY ">>> Closing ReserveringenBestand. IOStatus: " IOStatus
            EXIT PROGRAM.

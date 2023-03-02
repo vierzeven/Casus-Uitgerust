@@ -232,8 +232,6 @@
                AT END
                    SET R-EOF TO TRUE
                NOT AT END
-               DISPLAY Reserveringsrecord
-               DISPLAY "Type:" FS-R-ReserveringsType
                    MOVE FS-R-Woningnummer
                      TO SKM-R-N-Woningnummer
                    MOVE FS-R-JaarWeek
