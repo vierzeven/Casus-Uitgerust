@@ -42,7 +42,6 @@
                        CALL "ToevoegenKlant"
                    WHEN 2
                        CALL "ToevoegenReservering" USING BY REFERENCE Reserveringsnummer
-                       DISPLAY "Aangemaakt reservering met nr: " Reserveringsnummer
                    WHEN 3
                        CALL "BetaalReservering"
                    WHEN 4

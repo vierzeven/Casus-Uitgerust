@@ -69,14 +69,10 @@
        01 Teller PIC 99 VALUE ZERO.
        01 HuisjesTeller PIC 99 VALUE ZERO.
 
-       *>LINKAGE SECTION.
-       *>01 Reserveringsnummer PIC 9(8) VALUE ZEROES.
-
        LINKAGE SECTION.
        COPY Reserveringsnummer REPLACING ==(pf)== BY ==LS==.
 
        PROCEDURE DIVISION USING LS-Reserveringsnummer.
-         *>USING Reserveringsnummer.
        BeginProgram.
            DISPLAY SPACE
            OPEN I-O SysteemkengetallenBestand
@@ -126,11 +122,7 @@
                CLOSE BewonersBestand
            END-PERFORM
            WRITE Reserveringsrecord
-           DISPLAY ">>> Writing Reservering. IOStatus: " IOStatus
            REWRITE Systeemkengetallenrecord
-           DISPLAY ">>> Rewriting Systeemkengetallen. IOStatus: " IOStatus
            CLOSE SysteemkengetallenBestand
-           DISPLAY ">>> Closing SysteemkengetallenBestand. IOStatus: " IOStatus
            CLOSE ReserveringenBestand
-           DISPLAY ">>> Closing ReserveringenBestand. IOStatus: " IOStatus
            EXIT PROGRAM.
