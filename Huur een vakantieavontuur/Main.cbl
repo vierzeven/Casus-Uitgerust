@@ -14,6 +14,7 @@
 
        PROCEDURE DIVISION.
        BeginProgram.
+           CALL "Bestandsinitialisatie"
            PERFORM GetDatumVandaag
            PERFORM UNTIL VerlaatHetProgramma
                DISPLAY SPACE
