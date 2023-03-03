@@ -134,7 +134,8 @@
            MOVE AantalWeken TO FS-R-AantalWeken
            WRITE Reserveringsrecord
            CLOSE ReserveringenBestand
-
+           DISPLAY "Het onderhoud is gepland."
+           CALL "BezettingsOverzicht"
            EXIT PROGRAM.
 
        ValidatieNietGeslaagd.

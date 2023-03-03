@@ -80,7 +80,12 @@
            *> Daarom vind hier de verwerking plaats. In dit geval: het ophogen van de weekomzet.
            IF (FS-R-Jaar EQUALS 2023)
                PERFORM VARYING Teller FROM 0 BY 1 UNTIL Teller EQUALS FS-R-AantalWeken
-                   ADD 10 TO Weekomzetten(FS-R-Weeknummer - 17 + Teller)
+                   IF FS-R-DatumAnnulering EQUALS SPACES
+                   AND FS-R-DatumVerlopen EQUALS SPACES
+                   AND FS-R-ReserveringsType NOT EQUALS "V"
+                   AND FS-R-ReserveringsType NOT EQUALS "O"
+                       ADD 10 TO Weekomzetten(FS-R-Weeknummer - 17 + Teller)
+                   END-IF
                END-PERFORM
            END-IF.
        
