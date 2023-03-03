@@ -59,26 +59,19 @@
        
 
        PROCEDURE DIVISION.
-
-           DISPLAY "SUBPROGRAM - ANNULEER BOEKING"
-             
            PERFORM OpvragenResNummer
-
-           
            PERFORM ToonReservering
-           
            EXIT PROGRAM.
 
        OpvragenResNummer.
-
            DISPLAY "Reserveringnummer: " WITH NO ADVANCING
            ACCEPT Reserveringnr-WS
            DISPLAY "Annuleringsdatum: " WITH NO ADVANCING
            ACCEPT DatumVandaag
-
            .
 
        ToonReservering.
+           SET BlijfInHetMenu TO TRUE
            OPEN I-O ReserveringenBestand
            IF NOT IO-OK
                DISPLAY ">>> Fout bij het openen van het reserveringen bestand: " IOStatus
@@ -125,8 +118,6 @@
                              TO TRUE
                    END-EVALUATE
                END-PERFORM
-               
-               
            END-IF.
 
        AnnuleringBoeking.
@@ -136,6 +127,6 @@
                    DISPLAY "File status - " IOStatus
            END-REWRITE
            DISPLAY SPACE
-           DISPLAY "De boeking met reserveringsnummer " FS-R-Reserveringsnummer " is geannulleerd per " FS-R-DatumAnnulering
-           DISPLAY SPACE
+           DISPLAY "De reservering met nummer " FS-R-Reserveringsnummer " is geannuleerd per " FS-R-DatumAnnulering
            CLOSE ReserveringenBestand.
+           DISPLAY SPACE

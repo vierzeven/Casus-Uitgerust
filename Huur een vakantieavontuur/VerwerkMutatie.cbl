@@ -97,7 +97,6 @@
 
        PROCEDURE DIVISION.
 
-           DISPLAY "SUBPROGRAM - VERWERKMUTATIE"
            PERFORM RM90-InitialiseerProgramma
            IF KSK-NotAllEOF
                PERFORM RM80-InitialiseerVerwerking
@@ -130,9 +129,7 @@
            PERFORM GetDatumVandaag
            SET KSK-NotAllEOF TO TRUE
            OPEN I-O ReserveringenBestand
-           DISPLAY ">>> Opening ReserveringenBestand. IOStatus: " IOStatus
            OPEN INPUT MutatieBestand
-           DISPLAY ">>> Opening MutatieBestand. IOStatus: " IOStatus
            PERFORM RM61-LeesVolgendeReserveringOrigineel
            PERFORM RM63-LeesVolgendeMutatie
            PERFORM RM79-ZetIteratieVoorwaarde.
@@ -164,7 +161,7 @@
            .
        RM62-VerwerkMutatie.
            IF (GeenReserveringVerwerkt)
-               DISPLAY "Dit is een mutatie zonder reservering, dus we doen niks."
+      *       DISPLAY "Dit is een mutatie zonder reservering, dus we doen niks."
            ELSE
                SET WijzigingTeVerwerken
                  TO TRUE
