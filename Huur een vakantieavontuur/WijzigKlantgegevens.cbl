@@ -33,7 +33,7 @@
          88 VerlaatHetProgramma VALUE ZERO.
          88 BlijfInHetMenu VALUE 1.
        01 Keuze PIC 99 VALUE ZERO.
-
+       01 Invoerklantnummer PIC 9(8) VALUE ZERO.
 
 
        PROCEDURE DIVISION.
@@ -41,9 +41,10 @@
            *> Vraag 1: welke klant?
            DISPLAY SPACES
            DISPLAY "Van welke klant wilt u de gegevens wijzigen? (Klantnummer) " WITH NO ADVANCING
-           ACCEPT FS-K-Klantnummer
+           ACCEPT InvoerKlantnummer
            *> Validatie 1: bestaat klant?
-           OPEN I-O KlantenBestand
+           OPEN I-O KlantenBestand.
+           MOVE InvoerKlantnummer TO FS-K-Klantnummer
            READ KlantenBestand KEY IS FS-K-Klantnummer
                INVALID KEY
                    MOVE "Dit klantnummer bestaat niet." TO RedenValidatieFout

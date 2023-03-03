@@ -7,7 +7,7 @@
     </OutputName>
     <RootNamespace>Huur_een_vakantieavontuur</RootNamespace>
     <AutoGenerateBindingRedirects>False</AutoGenerateBindingRedirects>
-    <StartupObject>TonenToeristenBelasting</StartupObject>
+    <StartupObject>Main</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Bestandsinitialisatie.cbl" />
@@ -19,6 +19,7 @@
     <Compile Include="BezettingsOverzicht.cbl" />
     <Compile Include="PlanOnderhoud.cbl" />
     <Compile Include="LastMinuteBoeking.cbl" />
+    <Compile Include="test summary reports\Wijzigen klantgegevens.cbl" />
     <Compile Include="TonenToeristenBelasting.cbl" />
     <Compile Include="test summary reports\06. annuleer boeking.cbl" />
     <Compile Include="test summary reports\10. plan onderhoud.cbl" />
