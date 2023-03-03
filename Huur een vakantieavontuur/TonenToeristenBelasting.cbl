@@ -68,6 +68,10 @@
        01 WS-INT-Geboortedatum PIC 9(8).
        01 WS-INT-Leeftijd PIC 999.
 
+       01 ToeristenBelasting PIC 999V99.
+       01 ToeristenBelastingTotaal PIC 999V99.
+       01 DisplayToeristenBelastingTotaal PIC 9(6),9999.
+
        PROCEDURE DIVISION.
 
            DISPLAY "Voor welke week wil je de toeristen belasting zien (geef weeknummer): " WITH NO ADVANCING
@@ -109,13 +113,16 @@
 
                            SET NotEOFDatumWeek TO TRUE
                            PERFORM UNTIL EOFDatumWeek EQUALS TRUE
-                               
+
                                IF FS-R-Weeknummer EQUALS WeekNummer
                                    MOVE WeekDatum TO WS-WeekDatum
                                    MOVE FUNCTION INTEGER-OF-DATE (WS-WeekDatum) TO WS-INT-WeekDatum
                                    SET EOFDatumWeek TO TRUE
                                    COMPUTE WS-INT-Leeftijd EQUALS (WS-INT-WeekDatum - WS-INT-Geboortedatum) / 365.25
                                    DISPLAY "Leeftijd is: " WS-INT-Leeftijd
+
+                                   PERFORM ToeristenBelastingBerekenen
+
                                END-IF
 
                                READ DatumWeekBestand
@@ -141,11 +148,25 @@
                        SET EOFReserveringen TO TRUE
                END-READ
 
-            END-PERFORM
+           END-PERFORM
 
            CLOSE ReserveringenBestand
-           
-
-
-
+             
+           DISPLAY "De totale toeristenbelasting voor week " Week " is " DisplayToeristenBelastingTotaal " euro."
        EXIT PROGRAM.
+
+       ToeristenBelastingBerekenen.
+           IF WS-INT-Leeftijd >= 18
+               COMPUTE ToeristenBelasting EQUALS FS-R-AantalWeken * 7 * 1.5
+           END-IF
+           IF WS-INT-Leeftijd <= 5
+                   COMPUTE ToeristenBelasting EQUALS FS-R-AantalWeken * 7 * 0
+           END-IF
+           IF WS-INT-Leeftijd >5 AND WS-INT-Leeftijd < 18
+                   COMPUTE ToeristenBelasting EQUALS FS-R-AantalWeken * 7 * 1
+           END-IF
+
+               ADD ToeristenBelasting TO ToeristenBelastingTotaal
+           MOVE ToeristenBelastingTotaal TO DisplayToeristenBelastingTotaal.
+       
+
