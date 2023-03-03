@@ -26,7 +26,7 @@
                DISPLAY "5. Last Minute Boeking"
                DISPLAY "6. Bezettingsoverzicht"
                DISPLAY "7. Berekening Huuromzet"
-               DISPLAY "8. Annuleer Reservering (*)"
+               DISPLAY "8. Annuleer Reservering"
                DISPLAY "9. Annuleer Boeking"
                DISPLAY "10. Verwerk mutaties"
                DISPLAY "11. Plan onderhoud woning"
@@ -38,6 +38,9 @@
                EVALUATE Keuze
                    WHEN 0
                        CALL "Bestandsinitialisatie"
+                       DISPLAY SPACES
+                       DISPLAY "De bestanden zijn opnieuw geinitialiseerd met testdata."
+                       CALL "BezettingsOverzicht"
                    WHEN 1
                        CALL "ToevoegenKlant"
                    WHEN 2
@@ -47,7 +50,8 @@
                        DISPLAY "De reservering is opgeslagen."
                        CALL "BezettingsOverzicht"
                    WHEN 4
-                       CALL "BetaalReservering"
+      *                CALL "BetaalReservering"
+                       PERFORM NogNietGebouwd
                    WHEN 5
                        CALL "LastMinuteBoeking"
                    WHEN 6
@@ -55,9 +59,11 @@
                    WHEN 7
                        CALL "BerekeningHuuromzet"
                    WHEN 8
-                       CALL "AnnuleerReservering"
+                       CALL "AnnuleerBoeking"
+                       CALL "BezettingsOverzicht"
                    WHEN 9
                        CALL "AnnuleerBoeking"
+                       CALL "BezettingsOverzicht"
                    WHEN 10
                        CALL "VerwerkMutatie"
                    WHEN 11
@@ -74,6 +80,9 @@
            END-PERFORM
 
            STOP RUN.
+
+       NogNietGebouwd.
+           .
 
 
            
