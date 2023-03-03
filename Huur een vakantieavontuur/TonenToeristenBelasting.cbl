@@ -119,8 +119,7 @@
                                    MOVE FUNCTION INTEGER-OF-DATE (WS-WeekDatum) TO WS-INT-WeekDatum
                                    SET EOFDatumWeek TO TRUE
                                    COMPUTE WS-INT-Leeftijd EQUALS (WS-INT-WeekDatum - WS-INT-Geboortedatum) / 365,25
-                                   DISPLAY "Leeftijd is: " FUNCTION TRIM(WS-INT-Leeftijd)
-
+                                   
                                    PERFORM ToeristenBelastingBerekenen
 
                                END-IF
