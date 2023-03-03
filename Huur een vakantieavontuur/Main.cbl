@@ -20,16 +20,17 @@
                DISPLAY SPACE
                DISPLAY "0. Bestandsinitialisatie"
                DISPLAY "1. Toevoegen Klant"
-               DISPLAY "2. Toevoegen Reservering"
-               DISPLAY "3. Betaal Reservering (*)"
-               DISPLAY "4. Last Minute Boeking"
-               DISPLAY "5. Bezettingsoverzicht"
-               DISPLAY "6. Berekening Huuromzet"
-               DISPLAY "7. Annuleer Reservering (*)"
-               DISPLAY "8. Annuleer Boeking"
-               DISPLAY "9. Verwerk mutaties"
-               DISPLAY "10. Plan onderhoud woning"
-               DISPLAY "11. Plan verkoop woning"
+               DISPLAY "2. Wijzig Klant"
+               DISPLAY "3. Toevoegen Reservering"
+               DISPLAY "4. Betaal Reservering (*)"
+               DISPLAY "5. Last Minute Boeking"
+               DISPLAY "6. Bezettingsoverzicht"
+               DISPLAY "7. Berekening Huuromzet"
+               DISPLAY "8. Annuleer Reservering (*)"
+               DISPLAY "9. Annuleer Boeking"
+               DISPLAY "10. Verwerk mutaties"
+               DISPLAY "11. Plan onderhoud woning"
+               DISPLAY "12. Plan verkoop woning"
                DISPLAY "47. EXIT"
                DISPLAY SPACE
                DISPLAY "Uw keuze: " WITH NO ADVANCING
@@ -40,26 +41,28 @@
                    WHEN 1
                        CALL "ToevoegenKlant"
                    WHEN 2
+                       CALL "WijzigKlantgegevens"
+                   WHEN 3
                        CALL "ToevoegenReservering" USING BY REFERENCE Reserveringsnummer
                        DISPLAY "De reservering is opgeslagen."
                        CALL "BezettingsOverzicht"
-                   WHEN 3
-                       CALL "BetaalReservering"
                    WHEN 4
-                       CALL "LastMinuteBoeking"
+                       CALL "BetaalReservering"
                    WHEN 5
-                       CALL "BezettingsOverzicht"
+                       CALL "LastMinuteBoeking"
                    WHEN 6
-                       CALL "BerekeningHuuromzet"
+                       CALL "BezettingsOverzicht"
                    WHEN 7
-                       CALL "AnnuleerReservering"
+                       CALL "BerekeningHuuromzet"
                    WHEN 8
-                       CALL "AnnuleerBoeking"
+                       CALL "AnnuleerReservering"
                    WHEN 9
-                       CALL "VerwerkMutatie"
+                       CALL "AnnuleerBoeking"
                    WHEN 10
-                       CALL "PlanOnderhoud"
+                       CALL "VerwerkMutatie"
                    WHEN 11
+                       CALL "PlanOnderhoud"
+                   WHEN 12
                        CALL "PlanVerkoop"
                    WHEN 47
                        SET VerlaatHetProgramma
