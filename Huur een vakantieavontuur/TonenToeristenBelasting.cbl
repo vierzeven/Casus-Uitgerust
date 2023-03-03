@@ -71,7 +71,7 @@
 
        01 ToeristenBelasting PIC 999V99.
        01 ToeristenBelastingTotaal PIC 999V99.
-       01 DisplayToeristenBelastingTotaal PIC 999V99.
+       01 DisplayToeristenBelastingTotaal PIC Z99.99.
 
        PROCEDURE DIVISION.
 
@@ -151,7 +151,7 @@
 
            CLOSE ReserveringenBestand
              
-           DISPLAY "De totale toeristenbelasting voor week " Week " is " ToeristenBelastingTotaal " euro."
+           DISPLAY "De totale toeristenbelasting voor week " Week " is " DisplayToeristenBelastingTotaal " euro."
        EXIT PROGRAM.
 
        ToeristenBelastingBerekenen.
@@ -166,6 +166,6 @@
            END-IF
 
            ADD ToeristenBelasting TO ToeristenBelastingTotaal
-      *    MOVE ToeristenBelastingTotaal TO DisplayToeristenBelastingTotaal.
+           MOVE ToeristenBelastingTotaal TO DisplayToeristenBelastingTotaal.
            .
 
