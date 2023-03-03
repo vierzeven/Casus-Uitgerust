@@ -157,28 +157,6 @@
            MOVE "000000030000000217202318520230205"
              TO Reserveringsrecord
            WRITE Reserveringsrecord
-           *> Bewoners toevoegen: 1 reservering, 1 woning, 3 personen (15, 3, 30), week 18
-           OPEN I-O BewonersBestand
-           *> Bewoner 1
-           MOVE 3 TO FS-B-Reserveringsnummer
-           MOVE 1 TO FS-B-Volgnummer
-           MOVE "JS" TO FS-B-Initialen
-           MOVE "20200101" TO FS-B-Geboortedatum
-           WRITE Bewonersrecord
-           *> Bewoner 2
-           MOVE 3 TO FS-B-Reserveringsnummer
-           MOVE 2 TO FS-B-Volgnummer
-           MOVE "AB" TO FS-B-Initialen
-           MOVE "20080707" TO FS-B-Geboortedatum
-           WRITE Bewonersrecord
-           *> Bewoner 3
-           MOVE 3 TO FS-B-Reserveringsnummer
-           MOVE 3 TO FS-B-Volgnummer
-           MOVE "MK" TO FS-B-Initialen
-           MOVE "19931005" TO FS-B-Geboortedatum
-           WRITE Bewonersrecord
-
-           CLOSE BewonersBestand
 
 
            *> Woning 13, week 22, 7 weken
@@ -190,6 +168,27 @@
              TO Reserveringsrecord
            MOVE "20230210" TO FS-R-DatumBetaling
            WRITE Reserveringsrecord
+           *> Bewoners toevoegen: 1 reservering, 1 woning, 3 personen (15, 3, 30)
+           OPEN I-O BewonersBestand
+           *> Bewoner 1
+           MOVE 5 TO FS-B-Reserveringsnummer
+           MOVE 1 TO FS-B-Volgnummer
+           MOVE "JS" TO FS-B-Initialen
+           MOVE "20200101" TO FS-B-Geboortedatum
+           WRITE Bewonersrecord
+           *> Bewoner 2
+           MOVE 5 TO FS-B-Reserveringsnummer
+           MOVE 2 TO FS-B-Volgnummer
+           MOVE "AB" TO FS-B-Initialen
+           MOVE "20080707" TO FS-B-Geboortedatum
+           WRITE Bewonersrecord
+           *> Bewoner 3
+           MOVE 5 TO FS-B-Reserveringsnummer
+           MOVE 3 TO FS-B-Volgnummer
+           MOVE "MK" TO FS-B-Initialen
+           MOVE "19931005" TO FS-B-Geboortedatum
+           WRITE Bewonersrecord
+           CLOSE BewonersBestand
 
            *> Woning 12, onderhoud in week 18 en 19
            MOVE SPACES TO Reserveringsrecord
