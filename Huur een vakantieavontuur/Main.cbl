@@ -8,9 +8,6 @@
          88 VerlaatHetProgramma VALUE ZERO.
          88 BlijfInHetMenu VALUE 1.
        01 Keuze PIC 99 VALUE ZERO.
-
-       01 DatumVandaag PIC 9(8) VALUE ZERO.
-
        01 Reserveringsnummer PIC 9(8) VALUE ZEROES.
 
        PROCEDURE DIVISION.
@@ -18,17 +15,17 @@
       *>> >>>> TODO: Weghalen zodra in productie
            CALL "Bestandsinitialisatie"
              *>> >>>> END TODO
-           PERFORM GetDatumVandaag
+           CALL "BezettingsOverzicht"
            PERFORM UNTIL VerlaatHetProgramma
                DISPLAY SPACE
                DISPLAY "0. Bestandsinitialisatie"
                DISPLAY "1. Toevoegen Klant"
                DISPLAY "2. Toevoegen Reservering"
-               DISPLAY "3. Betaal Reservering"
+               DISPLAY "3. Betaal Reservering (*)"
                DISPLAY "4. Last Minute Boeking"
                DISPLAY "5. Bezettingsoverzicht"
                DISPLAY "6. Berekening Huuromzet"
-               DISPLAY "7. Annuleer Reservering"
+               DISPLAY "7. Annuleer Reservering (*)"
                DISPLAY "8. Annuleer Boeking"
                DISPLAY "9. Verwerk mutaties"
                DISPLAY "10. Plan onderhoud woning"
@@ -44,6 +41,8 @@
                        CALL "ToevoegenKlant"
                    WHEN 2
                        CALL "ToevoegenReservering" USING BY REFERENCE Reserveringsnummer
+                       DISPLAY "De reservering is opgeslagen."
+                       CALL "BezettingsOverzicht"
                    WHEN 3
                        CALL "BetaalReservering"
                    WHEN 4
@@ -72,10 +71,6 @@
            END-PERFORM
 
            STOP RUN.
-
-       GetDatumVandaag.
-           MOVE FUNCTION CURRENT-DATE (1:8)
-             TO DatumVandaag.
 
 
            

@@ -73,5 +73,6 @@
            REWRITE Systeemkengetallenrecord
            CLOSE SysteemkengetallenBestand
            CLOSE KlantenBestand.
-
+           DISPLAY FUNCTION TRIM(FS-K-Voornaam) " is toegevoegd aan het klantenbestand."
+           CALL "BezettingsOverzicht"
        EXIT PROGRAM.

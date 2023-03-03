@@ -1,7 +1,7 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. PlanOnderhoud.
+       PROGRAM-ID. PlanVerkoop.
        AUTHOR. Joey Schmitz en Michaël Koning.
-       DATE-WRITTEN. 02-03-2023.
+       DATE-WRITTEN. 03-03-2023.
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
@@ -59,7 +59,7 @@
            SET NotEOD TO TRUE
 
            *> Vraag 1: Welke woning?
-           DISPLAY "Voor welke woning wilt u onderhoud plannen?"
+           DISPLAY "Voor welke woning wilt u de verkoop plannen?"
            ACCEPT WoningnummerInput
 
            *> Validatie 1: bestaat de woning?
@@ -85,13 +85,17 @@
                PERFORM ValidatieNietGeslaagd
            END-IF
 
+           *> Validatie 2: is de woning al verkocht?
+           *> Reserveringenbestand openen, START op ALT KEY EQUALS Woningnummer
+           *> Itereren met NEXT RECORD en steeds checken of ReserveringsType EQUALS 'V'
+
            *> Vraag 2: welke week?
-           DISPLAY "In welke week begint het onderhoud?"
+           DISPLAY "In welke week wordt de woning verkocht?"
            ACCEPT Weeknummer
 
            *> Validatie 2: week in seizoen?
            SET ValidatieFout TO TRUE
-           MOVE "Onderhoud kan alleen gepland worden in week 18 t/m 37." TO RedenValidatieFout
+           MOVE "Verkoop van een woning kan alleen gepland worden in week 18 t/m 37." TO RedenValidatieFout
            IF Weeknummer >= 18 AND Weeknummer <= 37
                SET ValidatieGeslaagd TO TRUE
            END-IF
@@ -100,15 +104,8 @@
            END-IF
            MOVE SPACES TO RedenValidatieFout
 
-           *> Vraag 3: hoeveel weken?
-           DISPLAY "Hoeveel weken duurt het onderhoud?"
-           ACCEPT AantalWeken
-
            *> TODO: Validaties implementeren
            *> Validatie 3: woning bezet?
-           *> Validatie 4: past onderhoud in seizoen?
-           *> Validatie 5: is woning niet verkocht?
-
 
            *> Systeemkengetallen bestand updaten
            OPEN I-O SysteemkengetallenBestand
@@ -128,13 +125,12 @@
            MOVE HoogsteReserveringsnummer TO FS-R-Reserveringsnummer
            MOVE WoningnummerInput TO FS-R-Woningnummer
            MOVE DatumVandaag TO FS-R-DatumCreatie
-           MOVE "O" TO FS-R-ReserveringsType
+           MOVE "V" TO FS-R-ReserveringsType
            MOVE 2023 TO FS-R-Jaar
            MOVE Weeknummer TO FS-R-Weeknummer
-           MOVE AantalWeken TO FS-R-AantalWeken
            WRITE Reserveringsrecord
            CLOSE ReserveringenBestand
-           DISPLAY "Het onderhoud is gepland."
+           DISPLAY "De verkoop is gepland!"
            CALL "BezettingsOverzicht"
            EXIT PROGRAM.
 

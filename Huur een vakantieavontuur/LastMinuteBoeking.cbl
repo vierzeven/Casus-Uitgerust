@@ -33,6 +33,7 @@
            MOVE FS-R-DatumCreatie TO FS-R-DatumBetaling
            REWRITE Reserveringsrecord 
            CLOSE ReserveringenBestand
-
+           DISPLAY "De last minute boeking is gelukt."
+           CALL "BezettingsOverzicht"
        END PROGRAM LastMinuteBoeking.
        
