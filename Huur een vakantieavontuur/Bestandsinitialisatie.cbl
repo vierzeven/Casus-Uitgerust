@@ -27,8 +27,19 @@
                   ALTERNATE KEY IS FS-R-Woningnummer
                   WITH DUPLICATES
                   FILE STATUS IS IOStatus.
+       SELECT BewonersBestand
+           ASSIGN TO "C:\COBOL\DATA\HUUR\Bewoners.dat"
+           ORGANIZATION IS INDEXED
+           ACCESS MODE IS DYNAMIC
+           RECORD KEY IS FS-B-BewonersID
+           FILE STATUS IS IOStatus.
+
        DATA DIVISION.
        FILE SECTION.
+       FD BewonersBestand.
+       01 Bewonersrecord.
+       COPY Bewoner REPLACING ==(pf)== BY ==FS-B==.
+
        FD WoningenBestand.
        01 Woningrecord.
          03 Woningnummer PIC 99 VALUE ZERO.
@@ -58,12 +69,18 @@
 
        PROCEDURE DIVISION.
 
+           PERFORM ResetBewoners
            PERFORM VulWoningen
            PERFORM VulSysteemkengetallen
            PERFORM VulKlanten
            PERFORM VulReserveringen
 
            STOP RUN.
+
+       ResetBewoners.
+           OPEN OUTPUT BewonersBestand
+           CLOSE BewonersBestand
+           .
 
        VulWoningen.
            OPEN OUTPUT WoningenBestand
@@ -140,6 +157,30 @@
            MOVE "000000030000000217202318520230205"
              TO Reserveringsrecord
            WRITE Reserveringsrecord
+           *> Bewoners toevoegen: 1 reservering, 1 woning, 3 personen (15, 3, 30), week 18
+           OPEN I-O BewonersBestand
+           *> Bewoner 1
+           MOVE 3 TO FS-B-Reserveringsnummer
+           MOVE 1 TO FS-B-Volgnummer
+           MOVE "JS" TO FS-B-Initialen
+           MOVE "20200101" TO FS-B-Geboortedatum
+           WRITE Bewonersrecord
+           *> Bewoner 2
+           MOVE 3 TO FS-B-Reserveringsnummer
+           MOVE 2 TO FS-B-Volgnummer
+           MOVE "AB" TO FS-B-Initialen
+           MOVE "20080707" TO FS-B-Geboortedatum
+           WRITE Bewonersrecord
+           *> Bewoner 3
+           MOVE 3 TO FS-B-Reserveringsnummer
+           MOVE 3 TO FS-B-Volgnummer
+           MOVE "MK" TO FS-B-Initialen
+           MOVE "19931005" TO FS-B-Geboortedatum
+           WRITE Bewonersrecord
+
+           CLOSE BewonersBestand
+
+
            *> Woning 13, week 22, 7 weken
            MOVE "000000040000000313202322720230206"
              TO Reserveringsrecord

@@ -25,6 +25,7 @@
     <Compile Include="ToevoegenKlant.cbl" />
     <Compile Include="ToevoegenReservering.cbl" />
     <Compile Include="VerwerkMutatie.cbl" />
+    <Compile Include="WijzigKlantgegevens.cbl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Bewoner.cpy" />
