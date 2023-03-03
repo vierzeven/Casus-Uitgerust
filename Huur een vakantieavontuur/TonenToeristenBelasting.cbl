@@ -45,13 +45,13 @@
        WORKING-STORAGE SECTION.
        01 IOStatus PIC 99 VALUE ZERO.
          88 IO-OK VALUE ZERO.
-       01 EOFReserveringenVlag PIC 99 VALUE 0.
+       01 EOFReserveringenVlag PIC 99 VALUE 1.
          88 EOFReserveringen VALUE 0.
          88 NotEOFReserveringen VALUE 1.
-       01 EOFBewonersVlag PIC 99 VALUE 0.
+       01 EOFBewonersVlag PIC 99 VALUE 1.
          88 EOFBewoners VALUE 0.
          88 NotEOFBewoners VALUE 1.
-       01 EOFDatumWeekVlag PIC 99 VALUE 0.
+       01 EOFDatumWeekVlag PIC 99 VALUE 1.
          88 EOFDatumWeek VALUE 0.
          88 NotEOFDatumWeek VALUE 1.
 
@@ -73,17 +73,9 @@
            DISPLAY "Voor welke week wil je de toeristen belasting zien (geef weeknummer): " WITH NO ADVANCING
            ACCEPT Week
 
-           *>COMPUTE FUNCTION INTEGER-OF-DATE(BeginDatumMaand) FUNCTION INTEGER-OF-DATE(EindDatumMaand)
-
-           *>COMPUTE AantalDagenMaand = FUNCTION INTEGER-OF-DATE(BeginDatumMaand) - FUNCTION INTEGER-OF-DATE(EindDatumMaand)
-
            OPEN INPUT ReserveringenBestand
            IF NOT IO-OK
                DISPLAY "Sorry, het openen van het reserveringen bestand ging mis: " IOSTatus
-           END-IF
-           OPEN INPUT BewonersBestand
-           IF NOT IO-OK
-               DISPLAY "Sorry, het openen van het bewoners bestand ging mis: " IOSTatus
            END-IF
 
            READ ReserveringenBestand NEXT RECORD
@@ -92,38 +84,66 @@
            END-READ
 
            PERFORM UNTIL EOFReserveringen
-               IF (Week EQUALS FS-R-Weeknummer)
+               IF (Week EQUALS FS-R-Weeknummer AND FS-R-ReserveringsType EQUALS "B")
+
+                   OPEN INPUT BewonersBestand
+                   IF NOT IO-OK
+                       DISPLAY "Sorry, het openen van het bewoners bestand ging mis: " IOSTatus
+                   END-IF
 
                    READ BewonersBestand NEXT RECORD
                        AT END
                            SET EOFBewoners TO TRUE
                    END-READ
 
-                   PERFORM UNTIL EOFBewoners
+                   PERFORM UNTIL EOFBewoners EQUALS TRUE
                        IF (FS-B-Reserveringsnummer EQUALS FS-R-Reserveringsnummer)
                            MOVE FS-B-Geboortedatum TO WS-Geboortedatum
-                             MOVE FUNCTION INTEGER-OF-DATE(WS-Geboortedatum) TO WS-INT-Geboortedatum
+                           MOVE FUNCTION INTEGER-OF-DATE (WS-Geboortedatum) TO WS-INT-Geboortedatum
 
-                             OPEN INPUT DatumWeekBestand 
-                             READ DatumWeekBestand 
-                                 AT END
-                                 SET EOFDatumWeek TO TRUE 
-                             END-READ 
+                           OPEN INPUT DatumWeekBestand
+                           READ DatumWeekBestand
+                               AT END
+                                   SET EOFDatumWeek TO TRUE
+                           END-READ
 
-                             IF FS-R-Weeknummer EQUALS WeekNummer
-                                 MOVE WeekDatum TO WS-WeekDatum
-                                 MOVE FUNCTION INTEGER-OF-DATE(WS-WeekDatum) TO WS-INT-WeekDatum
+                           SET NotEOFDatumWeek TO TRUE
+                           PERFORM UNTIL EOFDatumWeek EQUALS TRUE
+                               
+                               IF FS-R-Weeknummer EQUALS WeekNummer
+                                   MOVE WeekDatum TO WS-WeekDatum
+                                   MOVE FUNCTION INTEGER-OF-DATE (WS-WeekDatum) TO WS-INT-WeekDatum
+                                   SET EOFDatumWeek TO TRUE
+                                   COMPUTE WS-INT-Leeftijd EQUALS (WS-INT-WeekDatum - WS-INT-Geboortedatum) / 365.25
+                                   DISPLAY "Leeftijd is: " WS-INT-Leeftijd
+                               END-IF
 
-                                 COMPUTE WS-INT-Leeftijd EQUALS (WS-INT-WeekDatum - WS-INT-Geboortedatum)/365.25
-                                 DISPLAY "Leeftijd is: " WS-INT-Leeftijd
-                             END-IF
+                               READ DatumWeekBestand
+                                   AT END
+                                       SET EOFDatumWeek TO TRUE
+                               END-READ
+
+                           END-PERFORM
+                           CLOSE DatumWeekBestand
                        END-IF
-                   END-PERFORM
 
+                       READ BewonersBestand NEXT RECORD
+                           AT END
+                               SET EOFBewoners TO TRUE
+                       END-READ
+
+                   END-PERFORM
+                   CLOSE BewonersBestand
                END-IF
-           END-PERFORM
-           *>Vergelijking reservering met begin en einddatum maand
-           *> Vergeet niet te sluiten
+
+               READ ReserveringenBestand NEXT RECORD
+                   AT END
+                       SET EOFReserveringen TO TRUE
+               END-READ
+
+            END-PERFORM
+
+           CLOSE ReserveringenBestand
            
 
 
