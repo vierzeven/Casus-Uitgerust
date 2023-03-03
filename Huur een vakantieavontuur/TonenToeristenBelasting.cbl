@@ -5,7 +5,7 @@
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
        SPECIAL-NAMES.
-       Currency Sign "E" with Picture Symbol '$'.
+       DECIMAL-POINT IS COMMA.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
 
@@ -45,13 +45,13 @@
        WORKING-STORAGE SECTION.
        01 IOStatus PIC 99 VALUE ZERO.
          88 IO-OK VALUE ZERO.
-       01 EOFReserveringenVlag PIC 99 VALUE 0.
+       01 EOFReserveringenVlag PIC 99 VALUE 1.
          88 EOFReserveringen VALUE 0.
          88 NotEOFReserveringen VALUE 1.
-       01 EOFBewonersVlag PIC 99 VALUE 0.
+       01 EOFBewonersVlag PIC 99 VALUE 1.
          88 EOFBewoners VALUE 0.
          88 NotEOFBewoners VALUE 1.
-       01 EOFDatumWeekVlag PIC 99 VALUE 0.
+       01 EOFDatumWeekVlag PIC 99 VALUE 1.
          88 EOFDatumWeek VALUE 0.
          88 NotEOFDatumWeek VALUE 1.
 
@@ -66,24 +66,20 @@
 
        01 WS-Geboortedatum PIC 9(8).
        01 WS-INT-Geboortedatum PIC 9(8).
-       01 WS-INT-Leeftijd PIC 999.
+       01 WS-INT-Leeftijd PIC ZZZ.
+
+       01 ToeristenBelasting PIC 999V99.
+       01 ToeristenBelastingTotaal PIC 999V99.
+       01 DisplayToeristenBelastingTotaal PIC ZZZ.ZZ.
 
        PROCEDURE DIVISION.
 
            DISPLAY "Voor welke week wil je de toeristen belasting zien (geef weeknummer): " WITH NO ADVANCING
            ACCEPT Week
 
-           *>COMPUTE FUNCTION INTEGER-OF-DATE(BeginDatumMaand) FUNCTION INTEGER-OF-DATE(EindDatumMaand)
-
-           *>COMPUTE AantalDagenMaand = FUNCTION INTEGER-OF-DATE(BeginDatumMaand) - FUNCTION INTEGER-OF-DATE(EindDatumMaand)
-
            OPEN INPUT ReserveringenBestand
            IF NOT IO-OK
                DISPLAY "Sorry, het openen van het reserveringen bestand ging mis: " IOSTatus
-           END-IF
-           OPEN INPUT BewonersBestand
-           IF NOT IO-OK
-               DISPLAY "Sorry, het openen van het bewoners bestand ging mis: " IOSTatus
            END-IF
 
            READ ReserveringenBestand NEXT RECORD
@@ -92,40 +88,85 @@
            END-READ
 
            PERFORM UNTIL EOFReserveringen
-               IF (Week EQUALS FS-R-Weeknummer)
+               IF (Week EQUALS FS-R-Weeknummer AND FS-R-ReserveringsType EQUALS "B")
+
+                   OPEN INPUT BewonersBestand
+                   IF NOT IO-OK
+                       DISPLAY "Sorry, het openen van het bewoners bestand ging mis: " IOSTatus
+                   END-IF
 
                    READ BewonersBestand NEXT RECORD
                        AT END
                            SET EOFBewoners TO TRUE
                    END-READ
 
-                   PERFORM UNTIL EOFBewoners
+                   PERFORM UNTIL EOFBewoners EQUALS TRUE
                        IF (FS-B-Reserveringsnummer EQUALS FS-R-Reserveringsnummer)
                            MOVE FS-B-Geboortedatum TO WS-Geboortedatum
-                             MOVE FUNCTION INTEGER-OF-DATE(WS-Geboortedatum) TO WS-INT-Geboortedatum
+                           MOVE FUNCTION INTEGER-OF-DATE (WS-Geboortedatum) TO WS-INT-Geboortedatum
 
-                             OPEN INPUT DatumWeekBestand 
-                             READ DatumWeekBestand 
-                                 AT END
-                                 SET EOFDatumWeek TO TRUE 
-                             END-READ 
+                           OPEN INPUT DatumWeekBestand
+                           READ DatumWeekBestand
+                               AT END
+                                   SET EOFDatumWeek TO TRUE
+                           END-READ
 
-                             IF FS-R-Weeknummer EQUALS WeekNummer
-                                 MOVE WeekDatum TO WS-WeekDatum
-                                 MOVE FUNCTION INTEGER-OF-DATE(WS-WeekDatum) TO WS-INT-WeekDatum
+                           SET NotEOFDatumWeek TO TRUE
+                           PERFORM UNTIL EOFDatumWeek EQUALS TRUE
 
-                                 COMPUTE WS-INT-Leeftijd EQUALS (WS-INT-WeekDatum - WS-INT-Geboortedatum)/365.25
-                                 DISPLAY "Leeftijd is: " WS-INT-Leeftijd
-                             END-IF
+                               IF FS-R-Weeknummer EQUALS WeekNummer
+                                   MOVE WeekDatum TO WS-WeekDatum
+                                   MOVE FUNCTION INTEGER-OF-DATE (WS-WeekDatum) TO WS-INT-WeekDatum
+                                   SET EOFDatumWeek TO TRUE
+                                   COMPUTE WS-INT-Leeftijd EQUALS (WS-INT-WeekDatum - WS-INT-Geboortedatum) / 365,25
+                                   DISPLAY "Leeftijd is: " FUNCTION TRIM(WS-INT-Leeftijd)
+
+                                   PERFORM ToeristenBelastingBerekenen
+
+                               END-IF
+
+                               READ DatumWeekBestand
+                                   AT END
+                                       SET EOFDatumWeek TO TRUE
+                               END-READ
+
+                           END-PERFORM
+                           CLOSE DatumWeekBestand
                        END-IF
+
+                       READ BewonersBestand NEXT RECORD
+                           AT END
+                               SET EOFBewoners TO TRUE
+                       END-READ
+
                    END-PERFORM
-
+                   CLOSE BewonersBestand
                END-IF
+
+               READ ReserveringenBestand NEXT RECORD
+                   AT END
+                       SET EOFReserveringen TO TRUE
+               END-READ
+
            END-PERFORM
-           *>Vergelijking reservering met begin en einddatum maand
-           *> Vergeet niet te sluiten
-           
 
-
-
+           CLOSE ReserveringenBestand
+             
+           DISPLAY "De totale toeristenbelasting voor week " Week " is " FUNCTION TRIM(DisplayToeristenBelastingTotaal) " euro."
        EXIT PROGRAM.
+
+       ToeristenBelastingBerekenen.
+           IF WS-INT-Leeftijd >= 18
+               COMPUTE ToeristenBelasting EQUALS FS-R-AantalWeken * 7 * 1,5
+           END-IF
+           IF WS-INT-Leeftijd <= 5
+                   COMPUTE ToeristenBelasting EQUALS FS-R-AantalWeken * 7 * 0
+           END-IF
+           IF WS-INT-Leeftijd >5 AND WS-INT-Leeftijd < 18
+                   COMPUTE ToeristenBelasting EQUALS FS-R-AantalWeken * 7 * 1
+           END-IF
+
+               ADD ToeristenBelasting TO ToeristenBelastingTotaal
+           MOVE ToeristenBelastingTotaal TO DisplayToeristenBelastingTotaal.
+       
+

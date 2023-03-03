@@ -7,7 +7,7 @@
     </OutputName>
     <RootNamespace>Huur_een_vakantieavontuur</RootNamespace>
     <AutoGenerateBindingRedirects>False</AutoGenerateBindingRedirects>
-    <StartupObject>Main</StartupObject>
+    <StartupObject>TonenToeristenBelasting</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Bestandsinitialisatie.cbl" />
