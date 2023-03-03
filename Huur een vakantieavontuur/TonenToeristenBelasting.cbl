@@ -5,7 +5,7 @@
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
        SPECIAL-NAMES.
-       Currency Sign "E" with Picture Symbol '$'.
+       DECIMAL-POINT IS COMMA.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
 
@@ -66,11 +66,11 @@
 
        01 WS-Geboortedatum PIC 9(8).
        01 WS-INT-Geboortedatum PIC 9(8).
-       01 WS-INT-Leeftijd PIC 999.
+       01 WS-INT-Leeftijd PIC ZZZ.
 
        01 ToeristenBelasting PIC 999V99.
        01 ToeristenBelastingTotaal PIC 999V99.
-       01 DisplayToeristenBelastingTotaal PIC 9(6),9999.
+       01 DisplayToeristenBelastingTotaal PIC ZZZ.ZZ.
 
        PROCEDURE DIVISION.
 
@@ -118,8 +118,8 @@
                                    MOVE WeekDatum TO WS-WeekDatum
                                    MOVE FUNCTION INTEGER-OF-DATE (WS-WeekDatum) TO WS-INT-WeekDatum
                                    SET EOFDatumWeek TO TRUE
-                                   COMPUTE WS-INT-Leeftijd EQUALS (WS-INT-WeekDatum - WS-INT-Geboortedatum) / 365.25
-                                   DISPLAY "Leeftijd is: " WS-INT-Leeftijd
+                                   COMPUTE WS-INT-Leeftijd EQUALS (WS-INT-WeekDatum - WS-INT-Geboortedatum) / 365,25
+                                   DISPLAY "Leeftijd is: " FUNCTION TRIM(WS-INT-Leeftijd)
 
                                    PERFORM ToeristenBelastingBerekenen
 
@@ -152,12 +152,12 @@
 
            CLOSE ReserveringenBestand
              
-           DISPLAY "De totale toeristenbelasting voor week " Week " is " DisplayToeristenBelastingTotaal " euro."
+           DISPLAY "De totale toeristenbelasting voor week " Week " is " FUNCTION TRIM(DisplayToeristenBelastingTotaal) " euro."
        EXIT PROGRAM.
 
        ToeristenBelastingBerekenen.
            IF WS-INT-Leeftijd >= 18
-               COMPUTE ToeristenBelasting EQUALS FS-R-AantalWeken * 7 * 1.5
+               COMPUTE ToeristenBelasting EQUALS FS-R-AantalWeken * 7 * 1,5
            END-IF
            IF WS-INT-Leeftijd <= 5
                    COMPUTE ToeristenBelasting EQUALS FS-R-AantalWeken * 7 * 0
