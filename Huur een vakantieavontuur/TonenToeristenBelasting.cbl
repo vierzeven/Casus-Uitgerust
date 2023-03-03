@@ -4,8 +4,8 @@
        DATE-WRITTEN. 02-03-2023.
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
-       SPECIAL-NAMES.
-       DECIMAL-POINT IS COMMA.
+      *SPECIAL-NAMES.
+      *DECIMAL-POINT IS COMMA.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
 
@@ -66,11 +66,12 @@
 
        01 WS-Geboortedatum PIC 9(8).
        01 WS-INT-Geboortedatum PIC 9(8).
-       01 WS-INT-Leeftijd PIC ZZZ.
+       01 WS-INT-Leeftijd PIC 999.
+       01 HRLeeftijd PIC ZZ9.
 
        01 ToeristenBelasting PIC 999V99.
        01 ToeristenBelastingTotaal PIC 999V99.
-       01 DisplayToeristenBelastingTotaal PIC ZZZ.ZZ.
+       01 DisplayToeristenBelastingTotaal PIC 999V99.
 
        PROCEDURE DIVISION.
 
@@ -88,7 +89,7 @@
            END-READ
 
            PERFORM UNTIL EOFReserveringen
-               IF (Week EQUALS FS-R-Weeknummer AND FS-R-ReserveringsType EQUALS "B")
+               IF (Week EQUALS FS-R-Weeknummer AND FS-R-DatumBetaling NOT EQUALS SPACES)
 
                    OPEN INPUT BewonersBestand
                    IF NOT IO-OK
@@ -118,9 +119,7 @@
                                    MOVE WeekDatum TO WS-WeekDatum
                                    MOVE FUNCTION INTEGER-OF-DATE (WS-WeekDatum) TO WS-INT-WeekDatum
                                    SET EOFDatumWeek TO TRUE
-                                   COMPUTE WS-INT-Leeftijd EQUALS (WS-INT-WeekDatum - WS-INT-Geboortedatum) / 365,25
-                                   DISPLAY "Leeftijd is: " FUNCTION TRIM(WS-INT-Leeftijd)
-
+                                   COMPUTE WS-INT-Leeftijd EQUALS (WS-INT-WeekDatum - WS-INT-Geboortedatum) / 365.25
                                    PERFORM ToeristenBelastingBerekenen
 
                                END-IF
@@ -152,21 +151,21 @@
 
            CLOSE ReserveringenBestand
              
-           DISPLAY "De totale toeristenbelasting voor week " Week " is " FUNCTION TRIM(DisplayToeristenBelastingTotaal) " euro."
+           DISPLAY "De totale toeristenbelasting voor week " Week " is " ToeristenBelastingTotaal " euro."
        EXIT PROGRAM.
 
        ToeristenBelastingBerekenen.
            IF WS-INT-Leeftijd >= 18
-               COMPUTE ToeristenBelasting EQUALS FS-R-AantalWeken * 7 * 1,5
+               COMPUTE ToeristenBelasting EQUALS FS-R-AantalWeken * 7 * 1.5
            END-IF
            IF WS-INT-Leeftijd <= 5
-                   COMPUTE ToeristenBelasting EQUALS FS-R-AantalWeken * 7 * 0
+               COMPUTE ToeristenBelasting EQUALS FS-R-AantalWeken * 7 * 0
            END-IF
-           IF WS-INT-Leeftijd >5 AND WS-INT-Leeftijd < 18
-                   COMPUTE ToeristenBelasting EQUALS FS-R-AantalWeken * 7 * 1
+           IF WS-INT-Leeftijd > 5 AND WS-INT-Leeftijd < 18
+               COMPUTE ToeristenBelasting EQUALS FS-R-AantalWeken * 7 * 1
            END-IF
 
-               ADD ToeristenBelasting TO ToeristenBelastingTotaal
-           MOVE ToeristenBelastingTotaal TO DisplayToeristenBelastingTotaal.
-       
+           ADD ToeristenBelasting TO ToeristenBelastingTotaal
+      *    MOVE ToeristenBelastingTotaal TO DisplayToeristenBelastingTotaal.
+           .
 
