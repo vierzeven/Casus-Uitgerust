@@ -5,7 +5,7 @@
     <EnableDefaultItems>false</EnableDefaultItems>
     <OutputName>Flexen en Relaxen</OutputName>
     <RootNamespace>Flexen_en_Relaxen</RootNamespace>
-    <StartupObject>05--LastMinuteBoeking</StartupObject>
+    <StartupObject>01--Initialiseren</StartupObject>
     <AutoGenerateBindingRedirects>False</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
