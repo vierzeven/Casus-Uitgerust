@@ -18,19 +18,20 @@
            CALL "BezettingsOverzicht"
            PERFORM UNTIL VerlaatHetProgramma
                DISPLAY SPACE
-               DISPLAY "0. Bestandsinitialisatie"
-               DISPLAY "1. Toevoegen Klant"
-               DISPLAY "2. Wijzig Klant"
-               DISPLAY "3. Toevoegen Reservering"
-               DISPLAY "4. Betaal Reservering (*)"
-               DISPLAY "5. Last Minute Boeking"
-               DISPLAY "6. Bezettingsoverzicht"
-               DISPLAY "7. Berekening Huuromzet"
-               DISPLAY "8. Annuleer Reservering"
-               DISPLAY "9. Annuleer Boeking"
+               DISPLAY "00. Bestandsinitialisatie"
+               DISPLAY "01. Toevoegen Klant"
+               DISPLAY "02. Wijzig Klant"
+               DISPLAY "03. Toevoegen Reservering"
+               DISPLAY "04. Betaal Reservering (*)"
+               DISPLAY "05. Last Minute Boeking"
+               DISPLAY "06. Bezettingsoverzicht"
+               DISPLAY "07. Berekening Huuromzet"
+               DISPLAY "08. Annuleer Reservering"
+               DISPLAY "09. Annuleer Boeking"
                DISPLAY "10. Verwerk mutaties"
                DISPLAY "11. Plan onderhoud woning"
                DISPLAY "12. Plan verkoop woning"
+               DISPLAY "13. Tonen toeristenbelasting"
                DISPLAY "47. EXIT"
                DISPLAY SPACE
                DISPLAY "Uw keuze: " WITH NO ADVANCING
@@ -50,7 +51,6 @@
                        DISPLAY "De reservering is opgeslagen."
                        CALL "BezettingsOverzicht"
                    WHEN 4
-      *                CALL "BetaalReservering"
                        PERFORM NogNietGebouwd
                    WHEN 5
                        CALL "LastMinuteBoeking"
@@ -70,6 +70,8 @@
                        CALL "PlanOnderhoud"
                    WHEN 12
                        CALL "PlanVerkoop"
+                   WHEN 13
+                       CALL "TonenToeristenBelasting"
                    WHEN 47
                        SET VerlaatHetProgramma
                          TO TRUE
@@ -82,6 +84,9 @@
            STOP RUN.
 
        NogNietGebouwd.
+           DISPLAY SPACE
+           ">>> Excuus. Deze functionaliteit is nog niet gerealiseerd."
+           DISPLAY SPACE
            .
 
 

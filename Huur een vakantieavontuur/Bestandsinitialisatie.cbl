@@ -173,14 +173,14 @@
            *> Bewoner 1
            MOVE 5 TO FS-B-Reserveringsnummer
            MOVE 1 TO FS-B-Volgnummer
-           MOVE "JS" TO FS-B-Initialen
-           MOVE "20200101" TO FS-B-Geboortedatum
+           MOVE "AB" TO FS-B-Initialen
+           MOVE "20080707" TO FS-B-Geboortedatum
            WRITE Bewonersrecord
            *> Bewoner 2
            MOVE 5 TO FS-B-Reserveringsnummer
            MOVE 2 TO FS-B-Volgnummer
-           MOVE "AB" TO FS-B-Initialen
-           MOVE "20080707" TO FS-B-Geboortedatum
+           MOVE "JS" TO FS-B-Initialen
+           MOVE "20200101" TO FS-B-Geboortedatum
            WRITE Bewonersrecord
            *> Bewoner 3
            MOVE 5 TO FS-B-Reserveringsnummer
